@@ -9,5 +9,7 @@ export class AppComponent {
   // DEBUG
   title = 'simple-receipt-manager';
 
-  
+  constructor(){
+    
+  }
 }
