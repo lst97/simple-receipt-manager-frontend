@@ -8,9 +8,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './common/header/header.component';
 import { NavbarComponent } from './common/navbar/navbar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { GroupViewerComponent } from './group-viewer/group-viewer.component';
+import { TabGroupComponent } from './common/tab-group/tab-group.component';
+
+// Chart.js
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, NavbarComponent],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    NavbarComponent,
+    GroupViewerComponent,
+    TabGroupComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -18,6 +29,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    NgChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

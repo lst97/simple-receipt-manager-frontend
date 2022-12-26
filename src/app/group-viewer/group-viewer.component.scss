@@ -1,0 +1,26 @@
+.group-viewer-layout {
+  margin: 32px;
+  height: 100%;
+}
+
+.group-viewer-wrapper {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 0px 16px 0px 16px;
+}
+
+.group-title-style {
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  margin: 32px 0px 32px 0px;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.more-vert-style {
+  color: gray;
+}
