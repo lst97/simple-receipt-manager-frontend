@@ -1,0 +1,73 @@
+<div class="navbar-placeholder"></div>
+
+<div class="navbar-style navbar-layout shadow-box">
+  <form [formGroup]="stateForm">
+    <mat-form-field appearance="fill" class="navbar-search-style">
+      <mat-label>Search</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="stateGroup"
+        [matAutocomplete]="autoGroup"
+      />
+
+      <!-- SEARCH -->
+      <mat-autocomplete #autoGroup="matAutocomplete">
+        <mat-optgroup
+          *ngFor="let group of stateGroupOptions | async"
+          [label]="group.letter"
+        >
+          <mat-option *ngFor="let name of group.names" [value]="name">
+            {{ name }}
+          </mat-option>
+        </mat-optgroup>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+
+  <!-- New Group -->
+  <button mat-button class="navbar-newgp-style mat-h4">+ New Group</button>
+
+  <!-- RECIPT GROUP ITEMS -->
+  <!--
+    <mat-nav-list>
+        <mat-list-item *ngFor="let link of links" [activated]="link.isActive">
+            <a matListItemTitle href="...">{{ link }}</a>
+            <button mat-icon-button (click)="showInfo(link)" matListItemMeta>
+                <mat-icon>info</mat-icon>
+            </button>
+        </mat-list-item>
+    </mat-nav-list>
+  -->
+  <div class="navbar-recipt-groups-viewer">
+    <mat-nav-list>
+      <mat-list-item *ngFor="let group of reciptGroups">
+        <a matListItemTitle href="...">{{ group }}</a>
+      </mat-list-item>
+    </mat-nav-list>
+  </div>
+  <mat-divider></mat-divider>
+
+  <!-- FOOTER GROUP ITEMS -->
+  <mat-selection-list #group [multiple]="false">
+    <mat-list-option *ngFor="let group of footerGroups" [value]="group">
+      <div class="navbar-item-style">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Account Box"
+          class="navbar-item-icon-style"
+          >account_box</mat-icon
+        >
+        <span>
+          {{ group }}
+        </span>
+      </div>
+    </mat-list-option>
+  </mat-selection-list>
+  <mat-divider></mat-divider>
+
+  <!-- FOOTER -->
+  <div class="navbar-footer-style">
+    <span align class="mat-h4 navbar-footer-text-style">@ Copy Right</span>
+  </div>
+</div>
