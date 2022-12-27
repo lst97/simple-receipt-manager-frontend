@@ -5,3 +5,23 @@ body {
   margin: 0;
   height: 100%;
 }
+
+.flex-container-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-container-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.flex-fill {
+  flex-grow: 1;
+}
