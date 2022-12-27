@@ -13,6 +13,8 @@ import { TabGroupComponent } from './common/tab-group/tab-group.component';
 
 // Chart.js
 import { NgChartsModule } from 'ng2-charts';
+import { PieComponent } from './common/charts/pie/pie.component';
+import { ReciptTableComponent } from './common/recipt-table/recipt-table.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { NgChartsModule } from 'ng2-charts';
     NavbarComponent,
     GroupViewerComponent,
     TabGroupComponent,
+    PieComponent,
+    ReciptTableComponent,
   ],
   imports: [
     BrowserModule,
