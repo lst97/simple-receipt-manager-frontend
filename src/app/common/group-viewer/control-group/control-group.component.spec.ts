@@ -8,9 +8,8 @@ describe('ControlGroupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ControlGroupComponent ]
-    })
-    .compileComponents();
+      declarations: [ControlGroupComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ControlGroupComponent);
     component = fixture.componentInstance;

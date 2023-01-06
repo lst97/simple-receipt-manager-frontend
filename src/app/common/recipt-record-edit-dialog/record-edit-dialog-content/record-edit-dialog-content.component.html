@@ -1,0 +1,97 @@
+<mat-tab-group>
+  <mat-tab label="SUMMARY">
+    <form class="tab-container-style">
+      <div class="flex-container-column">
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Merchant Name</mat-label>
+          <input matInput placeholder="Ex. Consto" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Merchant Address</mat-label>
+          <input matInput placeholder="Ex. Consto" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Merchant Phone</mat-label>
+          <input matInput placeholder="Ex. Consto" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Country</mat-label>
+          <input matInput placeholder="Ex. Consto" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Recipt No.</mat-label>
+          <input matInput placeholder="Ex. Consto" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Date</mat-label>
+          <input matInput placeholder="Ex. Consto" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Time</mat-label>
+          <input matInput placeholder="Ex. Consto" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Currency</mat-label>
+          <input matInput placeholder="Ex. Consto" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Total</mat-label>
+          <input matInput placeholder="Ex. Consto" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Tax</mat-label>
+          <input matInput placeholder="Ex. Consto" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Payment Method</mat-label>
+          <input matInput placeholder="Ex. Consto" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>OCR Confidence</mat-label>
+          <input matInput disabled placeholder="Ex. Consto" />
+        </mat-form-field>
+        <mat-form-field class="example-chip-list full-width" appearance="fill">
+          <mat-label>Payer</mat-label>
+          <mat-chip-grid #chipGrid aria-label="Fruit selection">
+            <mat-chip-row
+              *ngFor="let fruit of fruits"
+              (removed)="remove(fruit)"
+            >
+              {{ fruit }}
+              <button matChipRemove [attr.aria-label]="'remove ' + fruit">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          </mat-chip-grid>
+          <input
+            placeholder="New Fruit..."
+            #fruitInput
+            [formControl]="fruitCtrl"
+            [matChipInputFor]="chipGrid"
+            [matAutocomplete]="auto"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="add($event)"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="selected($event)"
+          >
+            <mat-option
+              *ngFor="let fruit of filteredFruits | async"
+              [value]="fruit"
+            >
+              {{ fruit }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Share With</mat-label>
+          <input matInput placeholder="Ex. Same With The Above Style" />
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-tab>
+  <mat-tab label="OCR TEXT"> OCR TEXT </mat-tab>
+  <mat-tab label="FULL JSON"> FULL JSON </mat-tab>
+  <mat-tab label="IMAGE"> IMAGE </mat-tab>
+</mat-tab-group>

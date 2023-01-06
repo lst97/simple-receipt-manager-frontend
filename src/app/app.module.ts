@@ -18,6 +18,8 @@ import { ReciptCalcComponent } from './common/recipt-calc/recipt-calc.component'
 
 // Chart.js
 import { NgChartsModule } from 'ng2-charts';
+import { ReciptRecordEditDialogComponent } from './common/recipt-record-edit-dialog/recipt-record-edit-dialog.component';
+import { RecordEditDialogContentComponent } from './common/recipt-record-edit-dialog/record-edit-dialog-content/record-edit-dialog-content.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { NgChartsModule } from 'ng2-charts';
     ControlGroupComponent,
     ReciptStatisticComponent,
     ReciptCalcComponent,
+    ReciptRecordEditDialogComponent,
+    RecordEditDialogContentComponent,
   ],
   imports: [
     BrowserModule,

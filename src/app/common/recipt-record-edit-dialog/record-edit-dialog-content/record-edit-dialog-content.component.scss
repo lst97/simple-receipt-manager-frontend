@@ -1,0 +1,17 @@
+@import "../../../../styles.scss";
+
+.input-container {
+  align-items: flex-start;
+}
+
+.dialog-action-group-layout {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.tab-container-style {
+  margin: 16px 0px 0px 0px;
+}

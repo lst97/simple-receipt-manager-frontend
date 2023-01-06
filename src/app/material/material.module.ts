@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
 
 const MaterialComponents = [
   MatToolbarModule,
@@ -24,6 +26,8 @@ const MaterialComponents = [
   MatTabsModule,
   MatTableModule,
   MatPaginatorModule,
+  MatDialogModule,
+  MatChipsModule,
 ];
 @NgModule({
   imports: [MaterialComponents],
