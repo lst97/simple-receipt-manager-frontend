@@ -1,3 +1,4 @@
+import { APP_CONFIG, APP_SERVICE_CONFIG } from './AppConfig/appconfig.service';
 import { MaterialModule } from './material/material.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -15,6 +16,7 @@ import { ControlGroupComponent } from './common/group-viewer/control-group/contr
 import { PieComponent } from './common/charts/pie/pie.component';
 import { ReciptStatisticComponent } from './common/recipt-statistic/recipt-statistic.component';
 import { ReciptCalcComponent } from './common/recipt-calc/recipt-calc.component';
+import { HttpClientModule } from '@angular/common/http';
 
 // Chart.js
 import { NgChartsModule } from 'ng2-charts';
@@ -44,8 +46,14 @@ import { RecordEditDialogContentComponent } from './common/recipt-record-edit-di
     FormsModule,
     ReactiveFormsModule,
     NgChartsModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_SERVICE_CONFIG,
+      useValue: APP_CONFIG,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
