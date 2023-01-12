@@ -50,8 +50,12 @@
   -->
   <div class="navbar-recipt-groups-viewer">
     <mat-selection-list #group [multiple]="false">
-      <mat-list-option *ngFor="let name of groupInfo.names" [value]="name">
-        <a matListItemTitle href="...">{{ name }}</a>
+      <mat-list-option
+        *ngFor="let record of groupInfo.records"
+        [value]="record.name"
+        [routerLink]="['/groups/', record.id]"
+      >
+        <a matListItemTitle>{{ record.name }}</a>
       </mat-list-option>
     </mat-selection-list>
   </div>

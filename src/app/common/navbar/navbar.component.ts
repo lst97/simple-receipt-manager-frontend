@@ -1,7 +1,7 @@
 import { NewGroupDialogComponent } from './new-group-dialog/new-group-dialog.component';
 import { LoggerService } from '../../logger/logger.service';
 import { GroupService } from './../../api/group/group.service';
-import { GroupsInfo, Group, StateGroup } from './../../api/group/group';
+import { GroupsInfo, GroupData, StateGroup } from './../../api/group/group';
 import { Component, OnInit, Optional } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
@@ -14,7 +14,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 })
 export class NavbarComponent implements OnInit {
   groupInfo: GroupsInfo;
-  groupList: Group[];
+  groupList: GroupData[];
   stateForm = this._formBuilder.group({
     stateGroup: '',
   });
@@ -28,7 +28,7 @@ export class NavbarComponent implements OnInit {
     @Optional() private loggerService: LoggerService,
     private dialog: MatDialog
   ) {
-    this.groupInfo = { len: 0, names: [] };
+    this.groupInfo = { len: 0, records: [] };
     this.groupList = [];
     this.groupService.stateForm = this.stateForm;
   }
@@ -68,7 +68,10 @@ export class NavbarComponent implements OnInit {
       // EX: [{"name":"group_1"},{"name":"group_2"}] -> ["group_1", "group_2"]
       this.groupInfo.len = response.length;
       response.forEach((element: any) => {
-        this.groupInfo.names.push(element.name);
+        this.groupInfo.records.push({
+          name: element.name,
+          id: element._id.$oid,
+        });
       });
     });
 

@@ -1,9 +1,9 @@
 export interface GroupsInfo {
   len: number;
-  names: string[];
+  records: any[];
 }
 
-export interface Group {
+export interface GroupData {
   _id: string;
   group_number: number;
   name: string;
