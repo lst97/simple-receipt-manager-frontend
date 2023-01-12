@@ -32,3 +32,20 @@ body {
   font-weight: bold;
   font-size: medium;
 }
+
+.dialog-title {
+  background-color: rgb(61, 70, 172);
+  color: white;
+  font-weight: bold;
+}
+
+.dialog-subtitle {
+  color: lightgray;
+  margin: 0px 0px 5px 0px;
+}
+
+.dialog-btn-group-layout {
+  margin: 16px 0px 16px 0px;
+  justify-content: center;
+  gap: 16px;
+}

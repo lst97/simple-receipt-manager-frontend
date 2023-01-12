@@ -22,6 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
 import { ReciptRecordEditDialogComponent } from './common/recipt-record-edit-dialog/recipt-record-edit-dialog.component';
 import { RecordEditDialogContentComponent } from './common/recipt-record-edit-dialog/record-edit-dialog-content/record-edit-dialog-content.component';
+import { NewGroupDialogComponent } from './common/navbar/new-group-dialog/new-group-dialog.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { RecordEditDialogContentComponent } from './common/recipt-record-edit-di
     ReciptCalcComponent,
     ReciptRecordEditDialogComponent,
     RecordEditDialogContentComponent,
+    NewGroupDialogComponent,
   ],
   imports: [
     BrowserModule,

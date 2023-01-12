@@ -8,7 +8,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
   styleUrls: ['./control-group.component.scss'],
 })
 export class ControlGroupComponent {
-  constructor(public dialog: MatDialog) {}
+  constructor(private dialog: MatDialog) {}
 
   imageInputChange(fileInputEvent: any) {
     console.log(fileInputEvent.target.files[0]);

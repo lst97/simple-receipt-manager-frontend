@@ -29,7 +29,13 @@
   </form>
 
   <!-- New Group -->
-  <button mat-button class="navbar-newgp-style mat-h4">+ New Group</button>
+  <button
+    mat-button
+    (click)="openNewGroupDialog('0ms', '0ms')"
+    class="navbar-newgp-style mat-h4"
+  >
+    + New Group
+  </button>
 
   <!-- RECIPT GROUP ITEMS -->
   <!--

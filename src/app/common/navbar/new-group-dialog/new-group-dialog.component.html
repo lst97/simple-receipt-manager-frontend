@@ -1,0 +1,45 @@
+<h1 mat-dialog-title class="dialog-title">New Group</h1>
+<div mat-dialog-content class="dialog-content-body">
+  <div class="dialog-subtitle">subtitle</div>
+  <!-- Dialog Content -->
+  <form>
+    <div class="flex-container-column">
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Group Name</mat-label>
+        <input matInput placeholder="Ex. Consto" />
+      </mat-form-field>
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Members</mat-label>
+        <input matInput placeholder="Ex. Consto" />
+      </mat-form-field>
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Favorite Fruits</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Enter fruits">
+          <mat-chip-row
+            *ngFor="let fruit of fruits"
+            (removed)="remove(fruit)"
+            [editable]="true"
+            (edited)="edit(fruit, $event)"
+            [attr.aria-valuenow]="'press enter to edit ' + fruit.name"
+          >
+            {{ fruit.name }}
+            <button matChipRemove [attr.aria-label]="'remove ' + fruit.name">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+          <input
+            placeholder="New user name ..."
+            [matChipInputFor]="chipGrid"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="add($event)"
+          />
+        </mat-chip-grid>
+      </mat-form-field>
+    </div>
+  </form>
+</div>
+<div class="flex-container-row dialog-btn-group-layout">
+  <button mat-flat-button color="primary" class="btn-style">SUBMITE</button>
+  <button mat-flat-button class="btn-style">CANCEL</button>
+</div>
