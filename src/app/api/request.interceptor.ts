@@ -1,4 +1,4 @@
-import { LoggerService } from './../log/logger.service';
+import { LoggerService } from '../logger/logger.service';
 import { Injectable } from '@angular/core';
 import {
   HttpRequest,

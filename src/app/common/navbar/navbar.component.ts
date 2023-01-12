@@ -1,5 +1,5 @@
 import { NewGroupDialogComponent } from './new-group-dialog/new-group-dialog.component';
-import { LoggerService } from './../../log/logger.service';
+import { LoggerService } from '../../logger/logger.service';
 import { GroupService } from './../../api/group/group.service';
 import { GroupsInfo, Group, StateGroup } from './../../api/group/group';
 import { Component, OnInit, Optional } from '@angular/core';

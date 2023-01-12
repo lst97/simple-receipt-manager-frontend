@@ -1,4 +1,4 @@
-import { LoggerService } from './../../log/logger.service';
+import { LoggerService } from '../../logger/logger.service';
 import { AppConfig } from './../../AppConfig/appconfig.interface';
 import { APP_SERVICE_CONFIG } from './../../AppConfig/appconfig.service';
 import { Inject, Injectable } from '@angular/core';
