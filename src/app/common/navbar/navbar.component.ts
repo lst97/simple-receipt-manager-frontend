@@ -1,54 +1,33 @@
 import { LoggerService } from './../../log/logger.service';
 import { GroupService } from './../../api/group/group.service';
+import { GroupsInfo, Group, StateGroup } from './../../api/group/group';
 import { Component, OnInit, Optional } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { Observable } from 'rxjs/internal/Observable';
 
-export interface StateGroup {
-  letter: string;
-  names: string[];
-}
-
-export const _filter = (opt: string[], value: string): string[] => {
-  const filterValue = value.toLowerCase();
-
-  return opt.filter((item) => item.toLowerCase().includes(filterValue));
-};
-
-/**
- * @title Option groups autocomplete
- */
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-  groupsName: string[];
-  groupList: any;
-
-  footerGroups: string[] = ['Setting', 'Feedback', 'Logout'];
-
+  groupInfo: GroupsInfo;
+  groupList: Group[];
   stateForm = this._formBuilder.group({
     stateGroup: '',
   });
-
-  stateGroups: StateGroup[] = [
-    {
-      letter: 'A',
-      names: ['Alabama', 'Alaska', 'Arizona', 'Arkansas'],
-    },
-  ];
-
   stateGroupOptions!: Observable<StateGroup[]>;
 
+  footerGroups: string[] = ['Setting', 'Feedback', 'Logout'];
+
   constructor(
-    private _formBuilder: FormBuilder,
     private groupService: GroupService,
+    private _formBuilder: FormBuilder,
     @Optional() private loggerService: LoggerService
   ) {
-    this.groupsName = [];
+    this.groupInfo = { len: 0, names: [] };
+    this.groupList = [];
+    this.groupService.stateForm = this.stateForm;
   }
 
   ngOnInit() {
@@ -69,34 +48,14 @@ export class NavbarComponent implements OnInit {
         'this.groupService.getGroupsName().subscribe()'
       );
 
+      // JSON response to String[]
+      // EX: [{"name":"group_1"},{"name":"group_2"}] -> ["group_1", "group_2"]
+      this.groupInfo.len = response.length;
       response.forEach((element: any) => {
-        this.groupsName.push(element['name']);
+        this.groupInfo.names.push(element.name);
       });
-      this.loggerService?.success(
-        JSON.stringify(this.groupsName),
-        'navbar.component',
-        'this.groupService.getGroupsName().subscribe()'
-      );
     });
 
-    this.stateGroupOptions = this.stateForm
-      .get('stateGroup')!
-      .valueChanges.pipe(
-        startWith(''),
-        map((value) => this._filterGroup(value || ''))
-      );
-  }
-
-  private _filterGroup(value: string): StateGroup[] {
-    if (value) {
-      return this.stateGroups
-        .map((group) => ({
-          letter: group.letter,
-          names: _filter(group.names, value),
-        }))
-        .filter((group) => group.names.length > 0);
-    }
-
-    return this.stateGroups;
+    this.stateGroupOptions = this.groupService.getStateGroupOptions();
   }
 }
