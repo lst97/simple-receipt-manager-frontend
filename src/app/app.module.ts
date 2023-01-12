@@ -24,6 +24,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { ReciptRecordEditDialogComponent } from './common/recipt-record-edit-dialog/recipt-record-edit-dialog.component';
 import { RecordEditDialogContentComponent } from './common/recipt-record-edit-dialog/record-edit-dialog-content/record-edit-dialog-content.component';
 import { NewGroupDialogComponent } from './common/navbar/new-group-dialog/new-group-dialog.component';
+import { WelcomeComponent } from './common/welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { NewGroupDialogComponent } from './common/navbar/new-group-dialog/new-gr
     ReciptRecordEditDialogComponent,
     RecordEditDialogContentComponent,
     NewGroupDialogComponent,
+    WelcomeComponent,
   ],
   imports: [
     BrowserModule,
