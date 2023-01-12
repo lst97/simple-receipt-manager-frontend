@@ -1,3 +1,4 @@
+import { RequestInterceptor } from './api/request.interceptor';
 import { APP_CONFIG, APP_SERVICE_CONFIG } from './AppConfig/appconfig.service';
 import { MaterialModule } from './material/material.module';
 import { NgModule } from '@angular/core';
@@ -16,7 +17,7 @@ import { ControlGroupComponent } from './common/group-viewer/control-group/contr
 import { PieComponent } from './common/charts/pie/pie.component';
 import { ReciptStatisticComponent } from './common/recipt-statistic/recipt-statistic.component';
 import { ReciptCalcComponent } from './common/recipt-calc/recipt-calc.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 // Chart.js
 import { NgChartsModule } from 'ng2-charts';
@@ -54,6 +55,11 @@ import { NewGroupDialogComponent } from './common/navbar/new-group-dialog/new-gr
     {
       provide: APP_SERVICE_CONFIG,
       useValue: APP_CONFIG,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RequestInterceptor,
+      multi: true,
     },
   ],
   bootstrap: [AppComponent],

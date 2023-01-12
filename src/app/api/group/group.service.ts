@@ -68,7 +68,7 @@ export class GroupService {
     return this.http.get<string>(`${this.config.apiEndpoint}/groups`);
   }
 
-  // TODO: fix duplicated subscribe call
+  // TODO: fix duplicated subscribe call use sharReplay?
   getGroupsName(): Observable<any> {
     let observable = this.http.get<any>(
       `${this.config.apiEndpoint}/groups_name`
