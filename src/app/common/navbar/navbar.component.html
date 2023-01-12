@@ -43,17 +43,17 @@
     </mat-nav-list>
   -->
   <div class="navbar-recipt-groups-viewer">
-    <mat-nav-list>
-      <mat-list-item *ngFor="let name of groupInfo.names">
+    <mat-selection-list #group [multiple]="false">
+      <mat-list-option *ngFor="let name of groupInfo.names" [value]="name">
         <a matListItemTitle href="...">{{ name }}</a>
-      </mat-list-item>
-    </mat-nav-list>
+      </mat-list-option>
+    </mat-selection-list>
   </div>
   <mat-divider></mat-divider>
 
   <!-- FOOTER GROUP ITEMS -->
-  <mat-selection-list #group [multiple]="false">
-    <mat-list-option *ngFor="let group of footerGroups" [value]="group">
+  <mat-nav-list>
+    <mat-list-item *ngFor="let group of footerGroups">
       <div class="navbar-item-style">
         <mat-icon
           aria-hidden="false"
@@ -65,8 +65,8 @@
           {{ group }}
         </span>
       </div>
-    </mat-list-option>
-  </mat-selection-list>
+    </mat-list-item>
+  </mat-nav-list>
   <mat-divider></mat-divider>
 
   <!-- FOOTER -->
