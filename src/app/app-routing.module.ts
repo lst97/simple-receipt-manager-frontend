@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: 'welcome', component: WelcomeComponent },
   { path: '', redirectTo: '/welcome', pathMatch: 'full' },
   { path: 'groups/:id', component: GroupViewerComponent },
+  { path: '**', redirectTo: '/wlecome' },
 ];
 
 @NgModule({

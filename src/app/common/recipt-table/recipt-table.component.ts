@@ -1,13 +1,17 @@
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { GroupService } from './../../api/group/group.service';
+import { LoggerService } from './../../logger/logger.service';
+import { Component, ViewChild, OnInit, Optional } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
+import { ReceiptRecordElement } from './recipt-table';
 
 @Component({
   selector: 'app-recipt-table',
   templateUrl: './recipt-table.component.html',
   styleUrls: ['./recipt-table.component.scss'],
 })
-export class ReciptTableComponent implements AfterViewInit {
+export class ReciptTableComponent implements OnInit {
   displayedColumns: string[] = [
     'Name',
     'Recipt No',
@@ -17,170 +21,41 @@ export class ReciptTableComponent implements AfterViewInit {
     'Payment Method',
     'Share With',
   ];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  // TODO: sort -> https://material.angular.io/components/sort/overview
+  groupRecords: ReceiptRecordElement[] = [];
+  dataSource!: MatTableDataSource<ReceiptRecordElement>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  constructor(
+    @Optional() private logger: LoggerService,
+    private router: ActivatedRoute,
+    private groupService: GroupService
+  ) {}
+  ngOnInit(): void {
+    this.router.params.subscribe((params) => {
+      this.logger.info(
+        JSON.stringify(params),
+        'recipt-MatTableDataSource.component',
+        'ngOnInit()'
+      );
+
+      this.groupService.getGroupInfo(params['id']).subscribe((response) => {
+        this.logger.info(
+          JSON.stringify(response),
+          'recipt-table.component',
+          'this.groupService.getGroupInfo()'
+        );
+
+        this.groupRecords = [];
+        response.forEach((record: ReceiptRecordElement) => {
+          this.groupRecords.push(record as ReceiptRecordElement);
+        });
+
+        this.dataSource = new MatTableDataSource<ReceiptRecordElement>(
+          this.groupRecords
+        );
+        this.dataSource.paginator = this.paginator;
+      });
+    });
   }
 }
-
-// TODO: sort -> https://material.angular.io/components/sort/overview
-
-export interface PeriodicElement {
-  name: string;
-  recipt_no: number;
-  date: string;
-  payer: string;
-  total: number;
-  payment_method: string;
-  share_with: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  // { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-  {
-    name: 'Costco',
-    recipt_no: 123422,
-    date: '11/03/2022',
-    payer: 'Nelson',
-    total: 13.2,
-    payment_method: 'CASH',
-    share_with: 'Jeff',
-  },
-];

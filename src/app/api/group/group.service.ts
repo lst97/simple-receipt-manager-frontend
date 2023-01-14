@@ -3,7 +3,7 @@ import { AppConfig } from './../../AppConfig/appconfig.interface';
 import { APP_SERVICE_CONFIG } from './../../AppConfig/appconfig.service';
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 import { StateGroup } from './group';
 import { startWith, map } from 'rxjs/operators';
 import { FormGroup } from '@angular/forms';
@@ -66,6 +66,13 @@ export class GroupService {
   // Method for making a GET request
   getGroups(): Observable<any> {
     return this.http.get<string>(`${this.config.apiEndpoint}/groups`);
+  }
+
+  // Short description for receipt-viewer-table.
+  getGroupInfo(id: string): Observable<any> {
+    return this.http.get<string>(
+      `${this.config.apiEndpoint}/group_records/${id}`
+    );
   }
 
   // TODO: fix duplicated subscribe call use sharReplay?

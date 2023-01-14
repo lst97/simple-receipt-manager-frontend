@@ -47,16 +47,6 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.groupService.getGroups().subscribe((response) => {
-      this.groupList = response;
-
-      this.loggerService?.success(
-        JSON.stringify(this.groupList),
-        'navbar.component',
-        'this.groupService.getGroups().subscribe()'
-      );
-    });
-
     this.groupService.getGroupsName().subscribe((response) => {
       this.loggerService?.success(
         JSON.stringify(response),
