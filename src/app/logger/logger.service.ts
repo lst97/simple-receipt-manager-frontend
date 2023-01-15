@@ -42,6 +42,10 @@ export class LoggerService {
     let logString = this.formatLogString(msg, moduleName, callerName, 'WARN');
     console.log(logString);
   }
+  error(msg: string, moduleName = '', callerName = ''): void {
+    let logString = this.formatLogString(msg, moduleName, callerName, 'ERROR');
+    console.log(logString);
+  }
   fatal(msg: string, moduleName = '', callerName = ''): void {
     let logString = this.formatLogString(msg, moduleName, callerName, 'FATAL');
     console.log(logString);
