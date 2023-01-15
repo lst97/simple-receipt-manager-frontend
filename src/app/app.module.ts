@@ -25,6 +25,7 @@ import { ReciptRecordEditDialogComponent } from './common/recipt-record-edit-dia
 import { RecordEditDialogContentComponent } from './common/recipt-record-edit-dialog/record-edit-dialog-content/record-edit-dialog-content.component';
 import { NewGroupDialogComponent } from './common/navbar/new-group-dialog/new-group-dialog.component';
 import { WelcomeComponent } from './common/welcome/welcome.component';
+import { FileUploaderComponent } from './common/file-uploader/file-uploader.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { WelcomeComponent } from './common/welcome/welcome.component';
     RecordEditDialogContentComponent,
     NewGroupDialogComponent,
     WelcomeComponent,
+    FileUploaderComponent,
   ],
   imports: [
     BrowserModule,

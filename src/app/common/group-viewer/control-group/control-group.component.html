@@ -14,8 +14,9 @@
     hidden="true"
     type="file"
     onclick="this.value=null"
-    (change)="imageInputChange($event)"
-    accept=".png"
+    (change)="fileInputChange($event)"
+    accept=".png, .jpeg, .jpg"
+    multiple
   />
   <button
     mat-flat-button
