@@ -18,14 +18,14 @@ import { PieComponent } from './common/charts/pie/pie.component';
 import { ReciptStatisticComponent } from './common/recipt-statistic/recipt-statistic.component';
 import { ReciptCalcComponent } from './common/recipt-calc/recipt-calc.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
-// Chart.js
-import { NgChartsModule } from 'ng2-charts';
 import { ReciptRecordEditDialogComponent } from './common/recipt-record-edit-dialog/recipt-record-edit-dialog.component';
 import { RecordEditDialogContentComponent } from './common/recipt-record-edit-dialog/record-edit-dialog-content/record-edit-dialog-content.component';
 import { NewGroupDialogComponent } from './common/navbar/new-group-dialog/new-group-dialog.component';
 import { WelcomeComponent } from './common/welcome/welcome.component';
 import { FileUploaderComponent } from './common/file-uploader/file-uploader.component';
+
+// Chart.js
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [

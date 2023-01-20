@@ -3,26 +3,17 @@
   <button mat-raised-button color="warn" class="btn-style">Delete</button>
   <button
     mat-raised-button
-    (click)="openDialog('0ms', '0ms')"
+    (click)="openManuelAddDialog('0ms', '0ms')"
     color="primary"
     class="btn-style"
   >
     Add
   </button>
-  <input
-    #imageInput
-    hidden="true"
-    type="file"
-    onclick="this.value=null"
-    (change)="fileInputChange($event)"
-    accept=".png, .jpeg, .jpg"
-    multiple
-  />
   <button
     mat-flat-button
     color="primary"
     class="btn-style"
-    (click)="imageInput.click()"
+    (click)="openUploadDialog('0ms', '0ms')"
   >
     UPLOAD
   </button>
