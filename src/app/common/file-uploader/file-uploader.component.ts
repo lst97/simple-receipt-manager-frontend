@@ -94,7 +94,6 @@ export class FileUploaderComponent {
           if (err.error && err.error.message) {
             msg += ' ' + err.error.message;
           }
-
           this.message.push(msg);
         },
         complete: () => {
@@ -107,12 +106,11 @@ export class FileUploaderComponent {
   uploadFiles(): void {
     this.message = [];
     this.request_id = uuid();
+    this.fileService.total_files = this.selectFiles.length;
     if (this.selectedFiles) {
       for (let i = 0; i < this.selectedFiles.length; i++) {
         this.upload(i, this.selectedFiles[i], this.request_id);
       }
     }
-
-    this.fileService.finish(this.request_id);
   }
 }

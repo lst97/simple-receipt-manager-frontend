@@ -9,11 +9,15 @@ import { LoggerService } from '../../logger/logger.service';
   providedIn: 'root',
 })
 export class FileService {
+  total_files: number;
+
   constructor(
     @Inject(APP_SERVICE_CONFIG) private config: AppConfig,
     private http: HttpClient,
     private log: LoggerService
-  ) {}
+  ) {
+    this.total_files = 0;
+  }
 
   // use for tracking progress
   upload(request_id: string, file: File): Observable<HttpEvent<any>> {
@@ -21,6 +25,7 @@ export class FileService {
 
     formData.append('file', file);
     formData.append('request_id', request_id);
+    formData.append('total_files', this.total_files.toString());
 
     const req = new HttpRequest(
       'POST',
@@ -39,21 +44,5 @@ export class FileService {
   getFiles(): Observable<any> {
     // need id
     return this.http.get(`${this.config.apiEndpoint}/files`);
-  }
-
-  // Notice the API that the files are finished upload.
-  finish(request_id: string) {
-    const formData: FormData = new FormData();
-    formData.append('request_id', request_id);
-    const req = new HttpRequest(
-      'POST',
-      `${this.config.apiEndpoint}/test/upload/finialize/${request_id}`,
-      formData,
-      {
-        reportProgress: true,
-        responseType: 'json',
-      }
-    );
-    return this.http.request(req);
   }
 }
