@@ -15,8 +15,7 @@ export class ControlGroupComponent {
 
   constructor(
     @Optional() private logger: LoggerService,
-    private dialog: MatDialog,
-    private fileUploader: FileUploaderComponent
+    private dialog: MatDialog
   ) {}
 
   fileInputChange(fileInputEvent: any) {
@@ -56,7 +55,7 @@ export class ControlGroupComponent {
     }
   }
 
-  openDialog(
+  openManuelAddDialog(
     enterAnimationDuration: string,
     exitAnimationDuration: string
   ): void {
@@ -67,5 +66,18 @@ export class ControlGroupComponent {
     dialogConfig.exitAnimationDuration = exitAnimationDuration;
 
     this.dialog.open(ReciptRecordEditDialogComponent, dialogConfig);
+  }
+
+  openUploadDialog(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string
+  ): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '600px';
+    dialogConfig.maxHeight = 'none';
+    dialogConfig.enterAnimationDuration = enterAnimationDuration;
+    dialogConfig.exitAnimationDuration = exitAnimationDuration;
+
+    this.dialog.open(FileUploaderComponent, dialogConfig);
   }
 }
