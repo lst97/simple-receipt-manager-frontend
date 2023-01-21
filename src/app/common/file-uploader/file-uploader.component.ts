@@ -4,6 +4,7 @@ import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { FileService } from 'src/app/api/file/file.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Router } from '@angular/router';
 import { v4 as uuid } from 'uuid';
 
 @Component({
@@ -18,6 +19,7 @@ import { v4 as uuid } from 'uuid';
   ],
 })
 export class FileUploaderComponent {
+  groud_id!: string;
   animateDuration: string = '500';
   panelOpenState = false;
   firstFormGroup = this.formBuilder.group({
@@ -43,6 +45,7 @@ export class FileUploaderComponent {
   constructor(
     private formBuilder: FormBuilder,
     private fileService: FileService,
+    private router: Router,
     private logger: LoggerService
   ) {}
 
@@ -73,10 +76,11 @@ export class FileUploaderComponent {
   }
 
   upload(idx: number, file: File, requiest_id: string): void {
+    this.logger.info(this.groud_id);
     this.progressInfos[idx] = { value: 0, fileName: file.name };
 
     if (file) {
-      this.fileService.upload(requiest_id, file).subscribe({
+      this.fileService.upload(this.groud_id, requiest_id, file).subscribe({
         next: (event: any) => {
           if (event.type === HttpEventType.UploadProgress) {
             this.progressInfos[idx].value = Math.round(
@@ -106,6 +110,7 @@ export class FileUploaderComponent {
   uploadFiles(): void {
     this.message = [];
     this.request_id = uuid();
+    this.groud_id = this.router.url.split('/').pop() as string;
     this.fileService.total_files = this.selectFiles.length;
     if (this.selectedFiles) {
       for (let i = 0; i < this.selectedFiles.length; i++) {

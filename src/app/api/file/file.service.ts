@@ -20,7 +20,11 @@ export class FileService {
   }
 
   // use for tracking progress
-  upload(request_id: string, file: File): Observable<HttpEvent<any>> {
+  upload(
+    group_id: string,
+    request_id: string,
+    file: File
+  ): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
 
     formData.append('file', file);
@@ -29,7 +33,7 @@ export class FileService {
 
     const req = new HttpRequest(
       'POST',
-      `${this.config.apiEndpoint}/test/upload`,
+      `${this.config.apiEndpoint}/test/upload/${group_id}`,
       formData,
       {
         reportProgress: true,
