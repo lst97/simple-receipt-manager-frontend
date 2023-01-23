@@ -44,6 +44,10 @@ export class FileUploaderComponent {
 
   previews: string[] = [];
   request_id: string = '';
+  requestContainError: boolean = false;
+  requestContainSuccess: boolean = false;
+  isSecondStepAvaliable: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private fileService: FileService,
@@ -91,15 +95,14 @@ export class FileUploaderComponent {
     if (file) {
       this.fileService.upload(this.groud_id, requiest_id, file).subscribe({
         next: (event: any) => {
-          if (event.type === HttpEventType.Response) {
-            this.openSnackBar(event.body['error'] || event.body['message']);
-          } else if (event.type === HttpEventType.UploadProgress) {
+          if (event.type === HttpEventType.UploadProgress) {
             this.progressInfos[idx].value = Math.round(
               (100 * event.loaded) / event.total
             );
           } else if (event instanceof HttpResponse) {
             const msg = file.name + ': Successful!';
             this.message.push(msg);
+            this.requestContainSuccess = true;
           }
         },
         error: (err: any) => {
@@ -110,11 +113,18 @@ export class FileUploaderComponent {
             msg += ' ' + err.error.message;
           }
           this.message.push(msg);
-          this.openSnackBar('Image(s) processing contain error.');
+          if (this.requestContainError == false) {
+            this.openSnackBar('Image(s) processing contain error.');
+            this.requestContainError = true;
+          }
         },
         complete: () => {
           if (this.selectedFiles!.length - 1 == sequence) {
             this.openSnackBar('Image(s) processing complete.');
+            if (this.requestContainSuccess == true) {
+              this.isSecondStepAvaliable = true;
+              this.processImageFormGroup.disable();
+            }
           }
           this.logger.success('File(s) upload complete.');
         },
@@ -124,6 +134,11 @@ export class FileUploaderComponent {
 
   uploadFiles(): void {
     this.message = [];
+    this.requestContainError = false;
+    this.requestContainSuccess == false;
+    this.isSecondStepAvaliable = false;
+
+    this.processImageFormGroup.enable();
     this.request_id = uuid();
     this.groud_id = this.router.url.split('/').pop() as string;
     this.fileService.total_files = this.selectedFiles!.length;

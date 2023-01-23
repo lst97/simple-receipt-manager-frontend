@@ -43,7 +43,7 @@
         </div>
         <div>
           <button
-            mat-flat-button
+            mat-raised-button
             color="primary"
             class="btn-style"
             [disabled]="!(this.selectedFiles && this.selectedFiles[0])"
@@ -88,8 +88,23 @@
           </mat-expansion-panel>
         </mat-accordion>
         <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+          <button
+            mat-raised-button
+            color="basic"
+            class="btn-style"
+            matStepperPrevious
+          >
+            Back
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-style"
+            matStepperNext
+            [disabled]="!isSecondStepAvaliable"
+          >
+            Next
+          </button>
         </div>
       </form>
     </mat-step>
