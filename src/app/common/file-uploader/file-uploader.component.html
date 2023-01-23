@@ -1,12 +1,12 @@
 <h1 mat-dialog-title class="dialog-title">Receipt Record Editor</h1>
 <div mat-dialog-content class="dialog-content-body">
   <mat-stepper [linear]="true" #stepper [animationDuration]="animateDuration">
-    <mat-step [stepControl]="firstFormGroup">
+    <mat-step [stepControl]="selectImageFormGroup">
       <div class="flex-container-column align-left">
         <label class="mat-display-1">Upload</label>
         <label class="mat-caption">Select files from your device</label>
       </div>
-      <form [formGroup]="firstFormGroup">
+      <form [formGroup]="selectImageFormGroup">
         <ng-template matStepLabel>Select images to upload</ng-template>
 
         <mat-form-field>
@@ -46,7 +46,7 @@
             mat-flat-button
             color="primary"
             class="btn-style"
-            [disabled]="!selectedFiles"
+            [disabled]="!(this.selectedFiles && this.selectedFiles[0])"
             (click)="uploadFiles()"
             matStepperNext
           >
@@ -55,8 +55,8 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup" label="Processing">
-      <form [formGroup]="secondFormGroup">
+    <mat-step [stepControl]="processImageFormGroup" label="Processing">
+      <form [formGroup]="processImageFormGroup">
         <!-- Wait until the parse progress is finish from backend -->
         <!-- Upload Status -->
         <div *ngFor="let progressInfo of progressInfos">

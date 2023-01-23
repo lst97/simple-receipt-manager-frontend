@@ -1,3 +1,4 @@
+import { SnackbarService } from './../../snackbar/snackbar.service';
 import { LoggerService } from './../../logger/logger.service';
 import { Component } from '@angular/core';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
@@ -6,6 +7,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Router } from '@angular/router';
 import { v4 as uuid } from 'uuid';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-file-uploader',
@@ -22,10 +24,10 @@ export class FileUploaderComponent {
   groud_id!: string;
   animateDuration: string = '500';
   panelOpenState = false;
-  firstFormGroup = this.formBuilder.group({
-    firstCtrl: ['Temp PASS', Validators.required],
+  selectImageFormGroup = this.formBuilder.group({
+    firstCtrl: ['', Validators.required],
   });
-  secondFormGroup = this.formBuilder.group({
+  processImageFormGroup = this.formBuilder.group({
     secondCtrl: ['', Validators.required],
   });
 
@@ -46,8 +48,13 @@ export class FileUploaderComponent {
     private formBuilder: FormBuilder,
     private fileService: FileService,
     private router: Router,
+    private snackbarService: SnackbarService,
     private logger: LoggerService
   ) {}
+
+  openSnackBar(message: string) {
+    this.snackbarService.add(message);
+  }
 
   // selected Images that gonna upload.
   selectFiles(event: any): void {
@@ -72,17 +79,21 @@ export class FileUploaderComponent {
 
         this.selectedFileNames.push(this.selectedFiles[i].name);
       }
+      this.selectImageFormGroup.disable();
+    } else {
+      this.selectImageFormGroup.enable();
     }
   }
 
-  upload(idx: number, file: File, requiest_id: string): void {
-    this.logger.info(this.groud_id);
+  upload(idx: number, file: File, requiest_id: string, sequence: number): void {
     this.progressInfos[idx] = { value: 0, fileName: file.name };
 
     if (file) {
       this.fileService.upload(this.groud_id, requiest_id, file).subscribe({
         next: (event: any) => {
-          if (event.type === HttpEventType.UploadProgress) {
+          if (event.type === HttpEventType.Response) {
+            this.openSnackBar(event.body['error'] || event.body['message']);
+          } else if (event.type === HttpEventType.UploadProgress) {
             this.progressInfos[idx].value = Math.round(
               (100 * event.loaded) / event.total
             );
@@ -99,9 +110,13 @@ export class FileUploaderComponent {
             msg += ' ' + err.error.message;
           }
           this.message.push(msg);
+          this.openSnackBar('Image(s) processing contain error.');
         },
         complete: () => {
-          this.logger.success('File upload complete.');
+          if (this.selectedFiles!.length - 1 == sequence) {
+            this.openSnackBar('Image(s) processing complete.');
+          }
+          this.logger.success('File(s) upload complete.');
         },
       });
     }
@@ -111,10 +126,10 @@ export class FileUploaderComponent {
     this.message = [];
     this.request_id = uuid();
     this.groud_id = this.router.url.split('/').pop() as string;
-    this.fileService.total_files = this.selectFiles.length;
+    this.fileService.total_files = this.selectedFiles!.length;
     if (this.selectedFiles) {
       for (let i = 0; i < this.selectedFiles.length; i++) {
-        this.upload(i, this.selectedFiles[i], this.request_id);
+        this.upload(i, this.selectedFiles[i], this.request_id, i);
       }
     }
   }
