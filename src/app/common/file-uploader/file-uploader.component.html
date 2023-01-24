@@ -12,14 +12,8 @@
         <mat-form-field>
           <div>
             <mat-toolbar>
-              <input
-                matInput
-                [value]="
-                  selectedFileNames.length
-                    ? selectedFileNames.join(', ')
-                    : 'Select Images'
-                "
-              />
+              <!-- Create a div for image pending section -->
+              <input matInput [value]="'Select Images'" />
             </mat-toolbar>
 
             <input
@@ -46,7 +40,7 @@
             mat-raised-button
             color="primary"
             class="btn-style"
-            [disabled]="!(this.selectedFiles && this.selectedFiles[0])"
+            [disabled]="!(validFilesCount! > 0)"
             (click)="uploadFiles()"
             matStepperNext
           >

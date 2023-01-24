@@ -1,3 +1,4 @@
+import { throwError } from 'rxjs';
 import { SnackbarService } from './../../snackbar/snackbar.service';
 import { LoggerService } from './../../logger/logger.service';
 import { Component } from '@angular/core';
@@ -9,6 +10,19 @@ import { Router } from '@angular/router';
 import { v4 as uuid } from 'uuid';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 
+function isValidImage(file: string) {
+  let isValid = false;
+  let image = new Image();
+
+  image.src = file;
+  image.onload = function () {
+    //This should load the image so that you can actually check
+    //height and width.
+    if (image.height === 0 || image.width === 0) isValid = false;
+    else isValid = true;
+  };
+  return isValid ? true : false;
+}
 @Component({
   selector: 'app-file-uploader',
   templateUrl: './file-uploader.component.html',
@@ -32,6 +46,8 @@ export class FileUploaderComponent {
   });
 
   selectedFiles?: FileList;
+  validFilesFlags?: boolean[];
+  validFilesCount?: number;
 
   // displaying selected files.
   selectedFileNames: string[] = [];
@@ -66,24 +82,44 @@ export class FileUploaderComponent {
     this.progressInfos = [];
     this.selectedFileNames = [];
     this.selectedFiles = event.target.files;
-
+    this.validFilesFlags = [];
+    this.validFilesCount = 0;
     this.previews = [];
     if (this.selectedFiles && this.selectedFiles[0]) {
       const numberOfFiles = this.selectedFiles.length;
-      for (let i = 0; i < numberOfFiles; i++) {
+      for (let idx = 0; idx < numberOfFiles; idx++) {
         const reader = new FileReader();
 
         reader.onload = (e: any) => {
-          console.log(e.target.result);
-          this.previews.push(e.target.result);
+          const content = e.target.result;
+
+          let image = new Image();
+
+          image.src = content;
+          image.onload = () => {
+            this.previews.push(content);
+            this.validFilesCount! += 1;
+            this.validFilesFlags!.push(true);
+            this.selectImageFormGroup.disable();
+          };
+          image.onerror = () => {
+            this.logger.error(
+              'Invalid image format.',
+              'file-uploader.component',
+              'selectFiles()'
+            );
+          };
         };
 
-        // representing the file’s data as a base64 encoded string
-        reader.readAsDataURL(this.selectedFiles[i]);
-
-        this.selectedFileNames.push(this.selectedFiles[i].name);
+        // TODO: only push valid file name.
+        this.selectedFileNames.push(this.selectedFiles![idx].name);
+        try {
+          // representing the file’s data as a base64 encoded string
+          reader.readAsDataURL(this.selectedFiles[idx]);
+        } catch (e: any) {
+          this.logger.error(e.message);
+        }
       }
-      this.selectImageFormGroup.disable();
     } else {
       this.selectImageFormGroup.enable();
     }
@@ -119,7 +155,7 @@ export class FileUploaderComponent {
           }
         },
         complete: () => {
-          if (this.selectedFiles!.length - 1 == sequence) {
+          if (this.validFilesFlags!.length - 1 == sequence) {
             this.openSnackBar('Image(s) processing complete.');
             if (this.requestContainSuccess == true) {
               this.isSecondStepAvaliable = true;
@@ -141,10 +177,12 @@ export class FileUploaderComponent {
     this.processImageFormGroup.enable();
     this.request_id = uuid();
     this.groud_id = this.router.url.split('/').pop() as string;
-    this.fileService.total_files = this.selectedFiles!.length;
-    if (this.selectedFiles) {
-      for (let i = 0; i < this.selectedFiles.length; i++) {
-        this.upload(i, this.selectedFiles[i], this.request_id, i);
+    this.fileService.total_files = this.validFilesFlags!.length;
+    if (this.validFilesFlags) {
+      for (let i = 0; i < this.validFilesFlags.length; i++) {
+        if (this.validFilesFlags[i] == true) {
+          this.upload(i, this.selectedFiles![i], this.request_id, i);
+        }
       }
     }
   }
