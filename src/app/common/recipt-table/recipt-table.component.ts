@@ -33,19 +33,7 @@ export class ReciptTableComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.router.params.subscribe((params) => {
-      this.logger.info(
-        JSON.stringify(params),
-        'recipt-MatTableDataSource.component',
-        'ngOnInit()'
-      );
-
       this.groupService.getGroupInfo(params['id']).subscribe((response) => {
-        this.logger.info(
-          JSON.stringify(response),
-          'recipt-table.component',
-          'this.groupService.getGroupInfo()'
-        );
-
         this.groupRecords = [];
         response.forEach((record: ReceiptRecordElement) => {
           this.groupRecords.push(record as ReceiptRecordElement);

@@ -1,7 +1,7 @@
 import { throwError } from 'rxjs';
 import { SnackbarService } from './../../snackbar/snackbar.service';
 import { LoggerService } from './../../logger/logger.service';
-import { Component } from '@angular/core';
+import { Component, Optional } from '@angular/core';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { FileService } from 'src/app/api/file/file.service';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -69,7 +69,7 @@ export class FileUploaderComponent {
     private fileService: FileService,
     private router: Router,
     private snackbarService: SnackbarService,
-    private logger: LoggerService
+    @Optional() private logger: LoggerService
   ) {}
 
   openSnackBar(message: string) {
