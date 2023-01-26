@@ -105,9 +105,27 @@
     <mat-step>
       <ng-template matStepLabel>Finialize</ng-template>
       <!-- User edit the parsed output -->
+      <record-edit-dialog-content
+        [result]="response"
+      ></record-edit-dialog-content>
       <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
+        <button
+          mat-raised-button
+          color="basic"
+          class="btn-style"
+          matStepperPrevious
+        >
+          Back
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          class="btn-style"
+          matStepperNext
+          [disabled]="!isSecondStepAvaliable"
+        >
+          Submite
+        </button>
       </div>
     </mat-step>
     <mat-step>
