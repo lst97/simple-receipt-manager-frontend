@@ -96,44 +96,96 @@
                   appearance="fill"
                 >
                   <mat-label>Payer</mat-label>
-                  <mat-chip-grid #chipGrid aria-label="Payer selection">
+                  <mat-chip-grid #payerChipGrid aria-label="Payer selection">
                     <mat-chip-row
-                      *ngFor="let fruit of fruits"
-                      (removed)="remove(fruit)"
+                      *ngIf="result['files'][idx]['receipt']['payer'] != ''"
+                      (removed)="
+                        removePayer(
+                          result['files'][idx]['receipt']['payer'],
+                          idx
+                        )
+                      "
                     >
-                      {{ fruit }}
+                      {{ result["files"][idx]["receipt"]["payer"] }}
                       <button
                         matChipRemove
-                        [attr.aria-label]="'remove ' + fruit"
+                        [attr.aria-label]="
+                          'remove ' + result['files'][idx]['receipt']['payer']
+                        "
                       >
                         <mat-icon>cancel</mat-icon>
                       </button>
                     </mat-chip-row>
                   </mat-chip-grid>
                   <input
-                    placeholder="New Fruit..."
-                    #fruitInput
-                    [formControl]="fruitCtrl"
-                    [matChipInputFor]="chipGrid"
-                    [matAutocomplete]="auto"
+                    placeholder="{{ payerPlaceHolderString }}"
+                    #payerInput
+                    [formControl]="payerCtrlList[idx]"
+                    [matChipInputFor]="payerChipGrid"
+                    [matAutocomplete]="payerAutoComplete"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    (matChipInputTokenEnd)="add($event)"
+                    (matChipInputTokenEnd)="addPayer($event, idx)"
                   />
                   <mat-autocomplete
-                    #auto="matAutocomplete"
-                    (optionSelected)="selected($event)"
+                    #payerAutoComplete="matAutocomplete"
+                    (optionSelected)="selectedPayer($event, idx)"
                   >
                     <mat-option
-                      *ngFor="let fruit of filteredFruits | async"
-                      [value]="fruit"
+                      *ngFor="let payer of filteredPayersList[idx] | async"
+                      [value]="payer"
                     >
-                      {{ fruit }}
+                      {{ payer }}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
-                <mat-form-field class="full-width" appearance="outline">
+                <mat-form-field
+                  class="example-chip-list full-width"
+                  appearance="fill"
+                >
                   <mat-label>Share With</mat-label>
-                  <input matInput placeholder="Ex. Same With The Above Style" />
+                  <mat-chip-grid
+                    #shareWithChipGrid
+                    aria-label="Share selection"
+                  >
+                    <mat-chip-row
+                      *ngFor="
+                        let shareWith of result['files'][idx]['receipt'][
+                          'share_with'
+                        ]
+                      "
+                      (removed)="removeShareWith(shareWith, idx)"
+                    >
+                      {{ shareWith }}
+                      <button
+                        matChipRemove
+                        [attr.aria-label]="'remove ' + shareWith"
+                      >
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip-row>
+                  </mat-chip-grid>
+                  <input
+                    placeholder="Select or insert share with"
+                    #shareWithInput
+                    [formControl]="shareWithCtrlList[idx]"
+                    [matChipInputFor]="shareWithChipGrid"
+                    [matAutocomplete]="shareWithAutoComplete"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="addShareWith($event, idx)"
+                  />
+                  <mat-autocomplete
+                    #shareWithAutoComplete="matAutocomplete"
+                    (optionSelected)="selectedShareWith($event, idx)"
+                  >
+                    <mat-option
+                      *ngFor="
+                        let shareWith of filteredShareWithsList[idx] | async
+                      "
+                      [value]="shareWith"
+                    >
+                      {{ shareWith }}
+                    </mat-option>
+                  </mat-autocomplete>
                 </mat-form-field>
               </div>
             </form>
@@ -143,7 +195,20 @@
           <mat-tab label="IMAGE"> IMAGE </mat-tab>
         </mat-tab-group>
         <div>
-          <button mat-button matStepperNext>Next</button>
+          <button mat-button matStepperPrevious>
+            <mat-icon
+              aria-hidden="false"
+              aria-label="back icon"
+              fontIcon="arrow_back_ios"
+            ></mat-icon>
+          </button>
+          <button mat-button matStepperNext>
+            <mat-icon
+              aria-hidden="false"
+              aria-label="next icon"
+              fontIcon="arrow_forward_ios"
+            ></mat-icon>
+          </button>
         </div>
       </form>
     </mat-step>

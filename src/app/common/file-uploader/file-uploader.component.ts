@@ -174,4 +174,10 @@ export class FileUploaderComponent {
       }
     }
   }
+
+  submite() {
+    this.fileService.submite(this.response).subscribe((res) => {
+      this.logger.success('Data uploaded into database.');
+    });
+  }
 }

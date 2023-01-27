@@ -49,4 +49,8 @@ export class FileService {
     // need id
     return this.http.get(`${this.config.apiEndpoint}/files`);
   }
+
+  submite(json: JSON) {
+    return this.http.post(`${this.config.apiEndpoint}/test/confirm`, json);
+  }
 }
