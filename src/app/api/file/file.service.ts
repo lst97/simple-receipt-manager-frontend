@@ -51,6 +51,6 @@ export class FileService {
   }
 
   submite(json: JSON) {
-    return this.http.post(`${this.config.apiEndpoint}/test/confirm`, json);
+    return this.http.post(`${this.config.apiEndpoint}/test/submite`, json);
   }
 }

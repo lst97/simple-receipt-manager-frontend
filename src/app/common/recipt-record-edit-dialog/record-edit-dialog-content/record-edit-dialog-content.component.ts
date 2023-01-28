@@ -54,7 +54,8 @@ export class RecordEditDialogContentComponent implements OnChanges {
     if (changes['result']) {
       if (
         changes['result'].currentValue !== null &&
-        changes['result'].currentValue !== undefined
+        changes['result'].currentValue !== undefined &&
+        changes['result'].currentValue['files'] !== undefined
       ) {
         let response = changes['result'].currentValue;
         for (let i = 0; i < response['files'].length; i++) {

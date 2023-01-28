@@ -127,15 +127,15 @@ export class FileUploaderComponent {
             const msg = file.name + ': Completed!';
             this.message.push(msg);
             this.requestContainSuccess = true;
-            if (
-              this.requestContainSuccess == true &&
-              this.validFilesFlags!.length - 1 == sequence
-            ) {
-              this.openSnackBar('Image(s) processing complete.');
-              this.response = event.body;
-              this.isSecondStepAvaliable = true;
-              this.processImageFormGroup.disable();
-            }
+          }
+          if (
+            this.requestContainSuccess == true &&
+            this.validFilesFlags!.length - 1 == sequence
+          ) {
+            this.openSnackBar('Image(s) processing complete.');
+            this.response = event.body;
+            this.isSecondStepAvaliable = true;
+            this.processImageFormGroup.disable();
           }
         },
         error: (err: any) => {
