@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { AppConfig } from './../../AppConfig/appconfig.interface';
 import { APP_SERVICE_CONFIG } from './../../AppConfig/appconfig.service';
-import { Observable, catchError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
 import { LoggerService } from '../../logger/logger.service';
 
@@ -14,7 +14,7 @@ export class FileService {
   constructor(
     @Inject(APP_SERVICE_CONFIG) private config: AppConfig,
     private http: HttpClient,
-    private log: LoggerService
+    private logger: LoggerService
   ) {
     this.total_files = 0;
   }
@@ -44,13 +44,7 @@ export class FileService {
     return this.http.request(req);
   }
 
-  //returns a list of Files’ information
-  getFiles(): Observable<any> {
-    // need id
-    return this.http.get(`${this.config.apiEndpoint}/files`);
-  }
-
-  submite(json: JSON) {
-    return this.http.post(`${this.config.apiEndpoint}/test/submite`, json);
+  submit(json: JSON) {
+    return this.http.post(`${this.config.apiEndpoint}/test/submit`, json);
   }
 }

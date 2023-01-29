@@ -51,20 +51,19 @@ export class RecordEditDialogContentComponent implements OnChanges {
   payerPlaceHolderString: string = 'Select or Insert payer';
   constructor(private formBuilder: FormBuilder) {}
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['result']) {
-      if (
-        changes['result'].currentValue !== null &&
-        changes['result'].currentValue !== undefined &&
-        changes['result'].currentValue['files'] !== undefined
-      ) {
-        let response = changes['result'].currentValue;
-        for (let i = 0; i < response['files'].length; i++) {
+    if (changes['result'] && changes['result'].currentValue) {
+      const response = changes['result'].currentValue;
+      if (response.files && response.files.length) {
+        for (const file of response.files) {
           this.payerCtrlList.push(new FormControl());
           this.shareWithCtrlList.push(new FormControl());
-          this.allMembers.push(response['users']);
-          let file_name = response['files'][i]['receipt']['file_name'];
-          this.formGroups.push(this.formBuilder.group({ file_name }));
-          this.refreshMembers(i);
+          this.allMembers.push(response.users);
+          this.formGroups.push(
+            this.formBuilder.group({
+              file_name: file.receipt.file_name,
+            })
+          );
+          this.refreshMembers(this.formGroups.length - 1);
         }
         this.result = { ...response };
       }
