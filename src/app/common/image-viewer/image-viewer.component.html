@@ -1,0 +1,24 @@
+<div class="image-viewer-card-style">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ data["file_name"] }}</mat-card-title>
+      <mat-card-subtitle class="image-viewer-subtitle">{{
+        data["info"]
+      }}</mat-card-subtitle>
+    </mat-card-header>
+    <img
+      class="image-viewer-image"
+      src="{{ data['base64'] }}"
+      alt="{{ data['file_name'] }}"
+    />
+  </mat-card>
+</div>
+<div class="image-viewer-footer">
+  <button
+    mat-raised-button
+    class="btn-style image-viewer-btn"
+    (click)="closeViewer()"
+  >
+    Close
+  </button>
+</div>

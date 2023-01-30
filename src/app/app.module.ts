@@ -24,6 +24,7 @@ import { RecordEditDialogContentComponent } from './common/recipt-record-edit-di
 import { NewGroupDialogComponent } from './common/navbar/new-group-dialog/new-group-dialog.component';
 import { WelcomeComponent } from './common/welcome/welcome.component';
 import { FileUploaderComponent } from './common/file-uploader/file-uploader.component';
+import { ImageViewerComponent } from './common/image-viewer/image-viewer.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { FileUploaderComponent } from './common/file-uploader/file-uploader.comp
     NewGroupDialogComponent,
     WelcomeComponent,
     FileUploaderComponent,
+    ImageViewerComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,7 +53,6 @@ import { FileUploaderComponent } from './common/file-uploader/file-uploader.comp
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    ThirdPartyModule,
   ],
   providers: [
     {

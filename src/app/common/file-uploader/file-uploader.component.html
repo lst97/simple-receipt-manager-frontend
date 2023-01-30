@@ -28,12 +28,27 @@
         </mat-form-field>
 
         <!-- Image Preview -->
-        <div>
-          <img
-            *ngFor="let preview of previews"
-            [src]="preview"
-            class="preview"
-          />
+        <div *ngFor="let preview of previews; let i = index">
+          <div *ngIf="preview != ''" class="image-preview-container">
+            <button
+              mat-icon-button
+              aria-label="Test"
+              [style.background-image]="'url(' + preview + ')'"
+              [style.background-size]="'cover'"
+              (click)="openImageViewer(i)"
+            ></button>
+            <div class="pending-info">
+              <mat-label class="title pending-info-title">{{
+                selectedFileNames[i]
+              }}</mat-label>
+              <mat-label class="subtitle pending-info-subtitle">{{
+                selectedFilesInfo[i]
+              }}</mat-label>
+            </div>
+            <div class="pending-status">
+              <mat-label>Pending</mat-label>
+            </div>
+          </div>
         </div>
         <div>
           <button

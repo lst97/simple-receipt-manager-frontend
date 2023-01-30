@@ -1,0 +1,24 @@
+@import "../../../styles.scss";
+
+.image-viewer-card-style {
+  margin: 16px 16px 16px 16px;
+  overflow: hidden;
+}
+
+.image-viewer-footer {
+  margin: 16px 0px 16px 0px;
+  width: 100%;
+  display: flex;
+}
+
+.image-viewer-image {
+  width: 1000px;
+  height: 1000px;
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.image-viewer-btn {
+  margin: 0px 16px 16px 16px;
+  justify-content: center;
+}

@@ -1,3 +1,5 @@
+import { ImageViewerComponent } from './../image-viewer/image-viewer.component';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SnackbarService } from './../../snackbar/snackbar.service';
 import { LoggerService } from './../../logger/logger.service';
 import { Component, Optional } from '@angular/core';
@@ -31,9 +33,11 @@ export class FileUploaderComponent {
   });
 
   selectedFiles?: FileList;
+  selectedFilesInfo: string[] = [];
   validFilesFlags?: boolean[];
   validFilesCount?: number;
   response?: any;
+  onload_info?: any[];
 
   // displaying selected files.
   selectedFileNames: string[] = [];
@@ -55,6 +59,7 @@ export class FileUploaderComponent {
     private fileService: FileService,
     private router: Router,
     private snackbarService: SnackbarService,
+    private dialog: MatDialog,
     @Optional() private logger: LoggerService
   ) {}
 
@@ -71,25 +76,39 @@ export class FileUploaderComponent {
     this.validFilesFlags = [];
     this.validFilesCount = 0;
     this.previews = [];
+    this.selectedFilesInfo = [];
 
     if (this.selectedFiles && this.selectedFiles[0]) {
       const numberOfFiles = this.selectedFiles.length;
+
+      for (let i = 0; i < numberOfFiles; i++) {
+        this.validFilesFlags.push(false);
+        this.previews.push('');
+        this.selectedFileNames.push('');
+        this.selectedFilesInfo.push('');
+      }
       for (let idx = 0; idx < numberOfFiles; idx++) {
         const reader = new FileReader();
 
         reader.onload = (e: any) => {
           const content = e.target.result;
-
           let image = new Image();
-
           image.src = content;
           image.onload = () => {
-            this.previews.push(content);
+            this.selectedFilesInfo[
+              idx
+            ] = `${image.naturalWidth} x ${image.naturalHeight}`;
+
+            this.previews[idx] = content;
+            this.validFilesFlags![idx] = true;
+            this.selectedFileNames![idx] = this.selectedFiles![idx].name;
             this.validFilesCount! += 1;
-            this.validFilesFlags!.push(true);
             this.selectImageFormGroup.disable();
           };
           image.onerror = () => {
+            this.snackbarService.add(
+              `Invalid image: "${this.selectedFiles![idx].name}".`
+            );
             this.logger.error(
               'Invalid image format.',
               'file-uploader.component',
@@ -98,8 +117,6 @@ export class FileUploaderComponent {
           };
         };
 
-        // TODO: only push valid file name.
-        this.selectedFileNames.push(this.selectedFiles![idx].name);
         try {
           // representing the file’s data as a base64 encoded string
           reader.readAsDataURL(this.selectedFiles[idx]);
@@ -145,6 +162,7 @@ export class FileUploaderComponent {
           }
           this.message.push(msg);
 
+          // prevent multiple snackbar
           if (!this.requestContainError) {
             this.openSnackBar('Image(s) processing contain error.');
             this.requestContainError = true;
@@ -163,16 +181,30 @@ export class FileUploaderComponent {
     this.request_id = uuid();
     this.groud_id = this.router.url.split('/').pop() as string;
     this.fileService.total_files = this.validFilesFlags?.length || 0;
-    this.validFilesFlags?.forEach((valid, i) => {
-      if (valid) {
+    for (let i = 0; i < this.validFilesFlags!.length; i++) {
+      if (this.validFilesFlags![i] == true) {
         this.upload(i, this.selectedFiles![i], this.request_id, i);
       }
-    });
+    }
   }
 
   submit() {
     this.fileService.submit(this.response).subscribe((res) => {
       this.logger.success('Data uploaded into database.');
     });
+  }
+
+  openImageViewer(idx: number) {
+    let data = {
+      base64: this.previews[idx],
+      file_name: this.selectedFileNames[idx],
+      info: this.selectedFilesInfo[idx],
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = data;
+    dialogConfig.maxWidth = '1000px';
+    dialogConfig.maxHeight = '1200px';
+    dialogConfig.panelClass = 'fullscreen-dialog';
+    this.dialog.open(ImageViewerComponent, dialogConfig);
   }
 }
