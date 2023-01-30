@@ -203,7 +203,7 @@ export class FileUploaderComponent {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = data;
     dialogConfig.maxWidth = '1000px';
-    dialogConfig.maxHeight = '1200px';
+    dialogConfig.maxHeight = '100%';
     dialogConfig.panelClass = 'fullscreen-dialog';
     this.dialog.open(ImageViewerComponent, dialogConfig);
   }

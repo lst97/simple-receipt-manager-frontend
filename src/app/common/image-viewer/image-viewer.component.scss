@@ -12,8 +12,8 @@
 }
 
 .image-viewer-image {
-  width: 1000px;
-  height: 1000px;
+  max-width: "100%";
+  max-height: calc(100vh - 200px);
   overflow: hidden;
   object-fit: cover;
 }
