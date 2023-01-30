@@ -1,6 +1,7 @@
+import { ThirdPartyModule } from './third-party/third-party.module';
 import { RequestInterceptor } from './api/request.interceptor';
 import { APP_CONFIG, APP_SERVICE_CONFIG } from './AppConfig/appconfig.service';
-import { MaterialModule } from './material/material.module';
+import { MaterialModule } from './third-party/material/material.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -23,9 +24,6 @@ import { RecordEditDialogContentComponent } from './common/recipt-record-edit-di
 import { NewGroupDialogComponent } from './common/navbar/new-group-dialog/new-group-dialog.component';
 import { WelcomeComponent } from './common/welcome/welcome.component';
 import { FileUploaderComponent } from './common/file-uploader/file-uploader.component';
-
-// Chart.js
-import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -52,8 +50,8 @@ import { NgChartsModule } from 'ng2-charts';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    NgChartsModule,
     HttpClientModule,
+    ThirdPartyModule,
   ],
   providers: [
     {
