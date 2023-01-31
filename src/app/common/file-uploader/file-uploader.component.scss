@@ -1,14 +1,5 @@
 @import "../../../styles.scss";
 
-.progress-bar {
-  padding: 0;
-}
-
-.progress {
-  width: 50px;
-  margin: 0px 0px 0px 8px;
-}
-
 .mat-input-element {
   font-size: medium;
   font-weight: 200;
@@ -113,4 +104,51 @@
 .pending-info-subtitle {
   color: #aaa;
   justify-content: center;
+}
+
+.upload-status {
+  margin: 16px 0px 16px 0px;
+}
+
+.upload-control-group {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.upload-progressbar {
+  border-radius: 4px;
+  width: 100px;
+}
+.upload-progress-filename {
+  max-width: 500px;
+  width: 500px;
+  overflow: auto;
+  white-space: nowrap;
+  align-items: center;
+}
+
+.upload-progress-filename::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.26);
+}
+
+.upload-progress-filename::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+
+.upload-progress {
+  gap: 8px;
+}
+
+.table-header {
+  text-align: center;
+}
+
+.upload-statu-message {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: auto;
+  white-space: nowrap;
 }

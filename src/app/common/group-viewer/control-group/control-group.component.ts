@@ -36,7 +36,7 @@ export class ControlGroupComponent {
     exitAnimationDuration: string
   ): void {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '600px';
+    dialogConfig.maxWidth = 'none';
     dialogConfig.maxHeight = 'none';
     dialogConfig.enterAnimationDuration = enterAnimationDuration;
     dialogConfig.exitAnimationDuration = exitAnimationDuration;

@@ -53,6 +53,7 @@ import { ImageViewerComponent } from './common/image-viewer/image-viewer.compone
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    ThirdPartyModule,
   ],
   providers: [
     {

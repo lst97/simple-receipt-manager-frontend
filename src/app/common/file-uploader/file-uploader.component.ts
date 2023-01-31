@@ -9,6 +9,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Router } from '@angular/router';
 import { v4 as uuid } from 'uuid';
+import { UploadProgressElement } from './file-uploader';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-file-uploader',
@@ -22,6 +24,9 @@ import { v4 as uuid } from 'uuid';
   ],
 })
 export class FileUploaderComponent {
+  groupRecords: UploadProgressElement[] = [];
+  dataSource!: MatTableDataSource<UploadProgressElement>;
+  displayedColumns: string[] = ['File Name', 'Progress', 'Value', 'Message'];
   groud_id!: string;
   animateDuration: string = '500';
   panelOpenState = false;
@@ -133,11 +138,22 @@ export class FileUploaderComponent {
     this.progressInfos[idx] = { value: 0, fileName: file.name };
 
     if (file) {
+      let record: UploadProgressElement = {
+        file_name: this.selectedFileNames![idx],
+        progress: 0,
+        message: 'Uploading...',
+      };
+      this.groupRecords.push(record as UploadProgressElement);
       this.fileService.upload(this.groud_id, requiest_id, file).subscribe({
         next: (event: any) => {
           if (event.type === HttpEventType.UploadProgress) {
             this.progressInfos[idx].value = Math.round(
               (100 * event.loaded) / event.total
+            );
+
+            record.progress = this.progressInfos![idx].value;
+            this.dataSource = new MatTableDataSource<UploadProgressElement>(
+              this.groupRecords
             );
           } else if (event instanceof HttpResponse) {
             this.logger.success('File(s) upload complete.');
@@ -151,6 +167,11 @@ export class FileUploaderComponent {
               this.isSecondStepAvaliable = true;
               this.processImageFormGroup.disable();
             }
+
+            record.message = 'Completed!';
+            this.dataSource = new MatTableDataSource<UploadProgressElement>(
+              this.groupRecords
+            );
           }
         },
         error: (err: any) => {
@@ -167,6 +188,11 @@ export class FileUploaderComponent {
             this.openSnackBar('Image(s) processing contain error.');
             this.requestContainError = true;
           }
+          record.progress = this.progressInfos[idx].value;
+          record.message = err.error.message;
+          this.dataSource = new MatTableDataSource<UploadProgressElement>(
+            this.groupRecords
+          );
         },
       });
     }
@@ -176,7 +202,8 @@ export class FileUploaderComponent {
     this.message = [];
     this.requestContainError = this.requestContainSuccess = false;
     this.isSecondStepAvaliable = false;
-
+    this.dataSource = new MatTableDataSource<UploadProgressElement>([]);
+    this.groupRecords = [];
     this.processImageFormGroup.enable();
     this.request_id = uuid();
     this.groud_id = this.router.url.split('/').pop() as string;
@@ -206,5 +233,15 @@ export class FileUploaderComponent {
     dialogConfig.maxHeight = '100%';
     dialogConfig.panelClass = 'fullscreen-dialog';
     this.dialog.open(ImageViewerComponent, dialogConfig);
+  }
+
+  processingBack() {
+    this.message = [];
+    this.requestContainError = this.requestContainSuccess = false;
+    this.isSecondStepAvaliable = false;
+    this.groupRecords = [];
+    this.dataSource = new MatTableDataSource<UploadProgressElement>([]);
+    this.processImageFormGroup.enable();
+    this.request_id = uuid();
   }
 }
