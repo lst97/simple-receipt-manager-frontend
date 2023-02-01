@@ -18,7 +18,9 @@
                     [(ngModel)]="
                       result['files'][idx]['receipt']['merchant_name']
                     "
+                    [formControl]="formCtrl"
                     name="merchant_name"
+                    required
                   />
                 </mat-form-field>
                 <mat-form-field class="full-width" appearance="outline">

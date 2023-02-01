@@ -8,7 +8,7 @@ import {
   ViewChildren,
   QueryList,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   MatAutocompleteSelectedEvent,
   MatAutocompleteTrigger,
@@ -25,6 +25,10 @@ import { FormBuilder } from '@angular/forms';
 })
 export class RecordEditDialogContentComponent implements OnChanges {
   separatorKeysCodes: number[] = [ENTER, COMMA];
+  formCtrl = new FormControl('', [
+    Validators.required,
+    this.NmaeValidator.bind(this),
+  ]);
   payerCtrlList: FormControl[] = [];
   shareWithCtrlList: FormControl[] = [];
   filteredPayersList: Observable<string[]>[] = [];
@@ -182,5 +186,14 @@ export class RecordEditDialogContentComponent implements OnChanges {
     );
 
     this.refreshMembers(idx);
+  }
+
+  NmaeValidator(control: FormControl) {
+    const nameRegex = /^\w[\w.\-#&\s]*$/;
+    const name = control.value;
+    if (!nameRegex.test(name)) {
+      return { invalidName: true };
+    }
+    return null;
   }
 }
