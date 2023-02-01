@@ -249,3 +249,16 @@
     transform: scale3d(1.1, 1.1, 1);
   }
 }
+
+.finialize-control-group {
+  gap: 16px;
+}
+
+.upload-container {
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.upload-card {
+  width: 100%;
+}

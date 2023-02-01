@@ -45,6 +45,8 @@ export class FileService {
   }
 
   submit(json: JSON) {
-    return this.http.post(`${this.config.apiEndpoint}/test/submit`, json);
+    return this.http.post(`${this.config.apiEndpoint}/test/submit`, json, {
+      observe: 'response',
+    });
   }
 }

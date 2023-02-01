@@ -226,7 +226,7 @@
       <record-edit-dialog-content
         [result]="response"
       ></record-edit-dialog-content>
-      <div>
+      <div class="flex-container-row finialize-control-group">
         <button
           mat-raised-button
           color="basic"
@@ -248,10 +248,85 @@
       </div>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      <!-- User edit the parsed output -->
-      <div>
-        <!-- Display done and a snackbar -->
+      <ng-template matStepLabel>Submite to database</ng-template>
+      <div class="flex-container-column upload-container">
+        <div class="upload-card">
+          <mat-card>
+            <mat-card-content class="flex-container-column processing-content">
+              <h2 class="processing-content-header">
+                {{ uploadingHeaderMessage }}
+              </h2>
+
+              <mat-progress-spinner
+                *ngIf="!isUploadProgressCompleted"
+                [color]="'primary'"
+                [mode]="'indeterminate'"
+              >
+              </mat-progress-spinner>
+              <div
+                class="wrapper"
+                *ngIf="isUploadContainError && isUploadProgressCompleted"
+              >
+                <svg
+                  class="checkmark-warn"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 52 52"
+                >
+                  <circle
+                    class="checkmark_circle"
+                    cx="26"
+                    cy="26"
+                    r="25"
+                    fill="none"
+                  />
+                  <path
+                    class="checkmark_check"
+                    fill="none"
+                    d="M14.1 14.1l23.8 23.8 m0,-23.8 l-23.8,23.8"
+                  />
+                </svg>
+              </div>
+              <div
+                class="wrapper"
+                *ngIf="isUploadProgressCompleted && !isUploadContainError"
+              >
+                <svg
+                  class="checkmark-primary"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 52 52"
+                >
+                  <circle
+                    class="checkmark__circle"
+                    cx="26"
+                    cy="26"
+                    r="25"
+                    fill="none"
+                  />
+                  <path
+                    class="checkmark__check"
+                    fill="none"
+                    d="M14.1 27.2l7.1 7.2 16.7-16.8"
+                  />
+                </svg>
+              </div>
+              <label class="processing-content-subtitle">{{
+                uploadingMessage
+              }}</label>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div>
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-style"
+            matStepperNext
+            [disabled]="!isUploadProgressCompleted"
+            (click)="closeDialog()"
+          >
+            DONE
+          </button>
+        </div>
       </div>
     </mat-step>
   </mat-stepper>

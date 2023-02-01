@@ -1,5 +1,9 @@
 import { ImageViewerComponent } from './../image-viewer/image-viewer.component';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogConfig,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { SnackbarService } from './../../snackbar/snackbar.service';
 import { LoggerService } from './../../logger/logger.service';
 import { Component, Optional } from '@angular/core';
@@ -42,6 +46,7 @@ export class FileUploaderComponent {
   validFilesCount?: number;
   response?: any;
   onload_info?: any[];
+  isUploadProgressCompleted: boolean = false;
 
   // displaying selected files.
   selectedFileNames: string[] = [];
@@ -59,6 +64,9 @@ export class FileUploaderComponent {
   isSecondStepAvaliable: boolean = false;
   procressingHeaderMessage: string = 'Processing...';
   procressingMessage: string = 'Please wait...';
+  uploadingHeaderMessage: string = 'Uploading...';
+  uploadingMessage: string = 'Please wait...';
+  isUploadContainError: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -66,6 +74,7 @@ export class FileUploaderComponent {
     private router: Router,
     private snackbarService: SnackbarService,
     private dialog: MatDialog,
+    private dialogRef: MatDialogRef<FileUploaderComponent>,
     @Optional() private logger: LoggerService
   ) {}
 
@@ -225,8 +234,17 @@ export class FileUploaderComponent {
   }
 
   submit() {
-    this.fileService.submit(this.response).subscribe((res) => {
-      this.logger.success('Data uploaded into database.');
+    this.fileService.submit(this.response).subscribe((res: any) => {
+      this.isUploadProgressCompleted = true;
+      if (res.status === 200) {
+        this.uploadingHeaderMessage = 'Upload complete!';
+        this.uploadingMessage = 'Done!';
+        this.openSnackBar('Data submitted successfully.');
+      } else {
+        this.isUploadContainError = true;
+        this.uploadingMessage = 'Data submitted failed, please try again!';
+        this.openSnackBar('Data submitted failed.');
+      }
     });
   }
 
@@ -254,5 +272,12 @@ export class FileUploaderComponent {
     this.dataSource = new MatTableDataSource<UploadProgressElement>([]);
     this.processImageFormGroup.enable();
     this.request_id = uuid();
+  }
+
+  closeDialog() {
+    console.log('close dialog');
+    this.dialogRef.close();
+    // refresh router with current url
+    window.location.reload();
   }
 }
