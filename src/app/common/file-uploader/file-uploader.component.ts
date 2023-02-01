@@ -29,7 +29,6 @@ export class FileUploaderComponent {
   displayedColumns: string[] = ['File Name', 'Progress', 'Value', 'Message'];
   groud_id!: string;
   animateDuration: string = '500';
-  panelOpenState = false;
   selectImageFormGroup = this.formBuilder.group({
     firstCtrl: ['', Validators.required],
   });
@@ -58,6 +57,8 @@ export class FileUploaderComponent {
   requestContainError: boolean = false;
   requestContainSuccess: boolean = false;
   isSecondStepAvaliable: boolean = false;
+  procressingHeaderMessage: string = 'Processing...';
+  procressingMessage: string = 'Please wait...';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -134,7 +135,7 @@ export class FileUploaderComponent {
     }
   }
 
-  upload(idx: number, file: File, requiest_id: string, sequence: number): void {
+  upload(idx: number, file: File, requiest_id: string): void {
     this.progressInfos[idx] = { value: 0, fileName: file.name };
 
     if (file) {
@@ -156,18 +157,22 @@ export class FileUploaderComponent {
               this.groupRecords
             );
           } else if (event instanceof HttpResponse) {
-            this.logger.success('File(s) upload complete.');
             const msg = `${file.name}: Completed!`;
             this.message.push(msg);
             this.requestContainSuccess = true;
 
-            if (this.validFilesFlags!.length - 1 === sequence) {
-              this.openSnackBar('Image(s) processing complete.');
+            if (this.validFilesFlags!.length - 1 === idx) {
               this.response = event.body;
-              this.isSecondStepAvaliable = true;
-              this.processImageFormGroup.disable();
+              this.procressingHeaderMessage = 'Processing complete!';
+              if (this.requestContainError) {
+                this.isSecondStepAvaliable = false;
+                this.processImageFormGroup.enable();
+              } else {
+                this.isSecondStepAvaliable = true;
+                this.processImageFormGroup.disable();
+                this.procressingMessage = 'Done!';
+              }
             }
-
             record.message = 'Completed!';
             this.dataSource = new MatTableDataSource<UploadProgressElement>(
               this.groupRecords
@@ -176,17 +181,19 @@ export class FileUploaderComponent {
         },
         error: (err: any) => {
           this.progressInfos[idx].value = 0;
-          let msg = `${file.name}: Failed!`;
 
-          if (err.error && err.error.message) {
-            msg += ` ${err.error.message}`;
-          }
-          this.message.push(msg);
-
-          // prevent multiple snackbar
+          // prevent multiple snackbar messages
           if (!this.requestContainError) {
+            this.procressingMessage =
+              'Process contain error, please try again!';
             this.openSnackBar('Image(s) processing contain error.');
             this.requestContainError = true;
+            this.isSecondStepAvaliable = false;
+            this.processImageFormGroup.enable();
+          }
+
+          if (this.validFilesFlags!.length - 1 === idx) {
+            this.procressingHeaderMessage = 'Processing complete!';
           }
           record.progress = this.progressInfos[idx].value;
           record.message = err.error.message;
@@ -207,10 +214,12 @@ export class FileUploaderComponent {
     this.processImageFormGroup.enable();
     this.request_id = uuid();
     this.groud_id = this.router.url.split('/').pop() as string;
-    this.fileService.total_files = this.validFilesFlags?.length || 0;
+
+    this.fileService.total_files =
+      this.validFilesFlags?.filter((value) => value === true).length || 0;
     for (let i = 0; i < this.validFilesFlags!.length; i++) {
-      if (this.validFilesFlags![i] == true) {
-        this.upload(i, this.selectedFiles![i], this.request_id, i);
+      if (this.validFilesFlags![i] === true) {
+        this.upload(i, this.selectedFiles![i], this.request_id);
       }
     }
   }
@@ -239,6 +248,8 @@ export class FileUploaderComponent {
     this.message = [];
     this.requestContainError = this.requestContainSuccess = false;
     this.isSecondStepAvaliable = false;
+    this.procressingHeaderMessage = 'Processing...';
+    this.procressingMessage = 'Please wait...';
     this.groupRecords = [];
     this.dataSource = new MatTableDataSource<UploadProgressElement>([]);
     this.processImageFormGroup.enable();

@@ -18,6 +18,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const MaterialComponents = [
   MatToolbarModule,
@@ -38,6 +39,7 @@ const MaterialComponents = [
   MatStepperModule,
   MatExpansionModule,
   MatSnackBarModule,
+  MatProgressSpinnerModule,
 ];
 @NgModule({
   imports: [MaterialComponents],
