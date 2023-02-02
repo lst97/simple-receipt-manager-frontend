@@ -18,43 +18,6 @@ export class ControlGroupComponent {
     private dialog: MatDialog
   ) {}
 
-  fileInputChange(fileInputEvent: any) {
-    this.files = fileInputEvent.target.files;
-    if (this.files.length > 0) {
-      for (const file of this.files) {
-        console.log(file);
-      }
-    } else {
-      this.logger.error(
-        'No Image Selected.',
-        'control-group.component',
-        'imageInputChange()'
-      );
-    }
-  }
-
-  // JUST FOR TEST, it should handle by file-uploader component
-  uploadFiles(files: File[]) {
-    for (const file of files) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        // USE uploader.service ------
-        // this.base64Images.push(reader.result);
-        // if(this.base64Images.length === this.files.length){
-        //   this.http.post('/api/upload', this.base64Images).subscribe(
-        //     response => {
-        //       console.log(response);
-        //     },
-        //     error => {
-        //       console.log(error);
-        //     }
-        //   );
-        // }
-      };
-    }
-  }
-
   openManuelAddDialog(
     enterAnimationDuration: string,
     exitAnimationDuration: string
@@ -73,7 +36,7 @@ export class ControlGroupComponent {
     exitAnimationDuration: string
   ): void {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '600px';
+    dialogConfig.maxWidth = 'none';
     dialogConfig.maxHeight = 'none';
     dialogConfig.enterAnimationDuration = enterAnimationDuration;
     dialogConfig.exitAnimationDuration = exitAnimationDuration;

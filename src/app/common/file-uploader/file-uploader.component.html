@@ -1,25 +1,19 @@
 <h1 mat-dialog-title class="dialog-title">Receipt Record Editor</h1>
 <div mat-dialog-content class="dialog-content-body">
   <mat-stepper [linear]="true" #stepper [animationDuration]="animateDuration">
-    <mat-step [stepControl]="firstFormGroup">
+    <mat-step [stepControl]="selectImageFormGroup">
       <div class="flex-container-column align-left">
         <label class="mat-display-1">Upload</label>
         <label class="mat-caption">Select files from your device</label>
       </div>
-      <form [formGroup]="firstFormGroup">
+      <form [formGroup]="selectImageFormGroup">
         <ng-template matStepLabel>Select images to upload</ng-template>
 
         <mat-form-field>
           <div>
             <mat-toolbar>
-              <input
-                matInput
-                [value]="
-                  selectedFileNames.length
-                    ? selectedFileNames.join(', ')
-                    : 'Select Images'
-                "
-              />
+              <!-- Create a div for image pending section -->
+              <input matInput [value]="'Select Images'" />
             </mat-toolbar>
 
             <input
@@ -34,78 +28,305 @@
         </mat-form-field>
 
         <!-- Image Preview -->
-        <div>
-          <img
-            *ngFor="let preview of previews"
-            [src]="preview"
-            class="preview"
-          />
+        <div *ngFor="let preview of previews; let i = index">
+          <div *ngIf="preview != ''" class="image-preview-container">
+            <button
+              mat-icon-button
+              aria-label="Test"
+              [style.background-image]="'url(' + preview + ')'"
+              [style.background-size]="'cover'"
+              (click)="openImageViewer(i)"
+            ></button>
+            <div class="pending-info">
+              <mat-label class="title pending-info-title">{{
+                selectedFileNames[i]
+              }}</mat-label>
+              <mat-label class="subtitle pending-info-subtitle">{{
+                selectedFilesInfo[i]
+              }}</mat-label>
+            </div>
+            <div class="pending-status">
+              <mat-label>Pending</mat-label>
+            </div>
+          </div>
         </div>
         <div>
           <button
-            mat-flat-button
+            mat-raised-button
             color="primary"
             class="btn-style"
-            [disabled]="!selectedFiles"
+            [disabled]="!(validFilesCount! > 0)"
             (click)="uploadFiles()"
             matStepperNext
           >
-            Next
+            NEXT
           </button>
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="secondFormGroup" label="Processing">
-      <form [formGroup]="secondFormGroup">
+    <mat-step [stepControl]="processImageFormGroup" label="Processing">
+      <form [formGroup]="processImageFormGroup">
         <!-- Wait until the parse progress is finish from backend -->
         <!-- Upload Status -->
-        <div *ngFor="let progressInfo of progressInfos">
-          <span>{{ progressInfo.fileName }}</span>
-          <mat-toolbar class="progress-bar">
-            <mat-progress-bar
-              color="primary"
-              [value]="progressInfo.value"
-            ></mat-progress-bar>
-            <span class="progress">{{ progressInfo.value }}%</span>
-          </mat-toolbar>
-        </div>
-        <mat-accordion>
-          <mat-expansion-panel
-            (opened)="panelOpenState = true"
-            (closed)="panelOpenState = false"
-          >
-            <mat-expansion-panel-header>
-              <mat-panel-title> File Upload Status </mat-panel-title>
-              <mat-panel-description>
-                Currently I am {{ panelOpenState ? "open" : "closed" }}
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <div *ngIf="message.length" class="message">
-              <ul *ngFor="let msg of message; let i = index">
-                <li>{{ msg }}</li>
-              </ul>
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
         <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+          <mat-card>
+            <mat-card-content class="flex-container-column processing-content">
+              <h2 class="processing-content-header">
+                {{ procressingHeaderMessage }}
+              </h2>
+
+              <mat-progress-spinner
+                *ngIf="!isSecondStepAvaliable && !requestContainError"
+                [color]="'primary'"
+                [mode]="'indeterminate'"
+              >
+              </mat-progress-spinner>
+              <div class="wrapper" *ngIf="requestContainError">
+                <svg
+                  class="checkmark-warn"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 52 52"
+                >
+                  <circle
+                    class="checkmark_circle"
+                    cx="26"
+                    cy="26"
+                    r="25"
+                    fill="none"
+                  />
+                  <path
+                    class="checkmark_check"
+                    fill="none"
+                    d="M14.1 14.1l23.8 23.8 m0,-23.8 l-23.8,23.8"
+                  />
+                </svg>
+              </div>
+              <div
+                class="wrapper"
+                *ngIf="isSecondStepAvaliable && !requestContainError"
+              >
+                <svg
+                  class="checkmark-primary"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 52 52"
+                >
+                  <circle
+                    class="checkmark__circle"
+                    cx="26"
+                    cy="26"
+                    r="25"
+                    fill="none"
+                  />
+                  <path
+                    class="checkmark__check"
+                    fill="none"
+                    d="M14.1 27.2l7.1 7.2 16.7-16.8"
+                  />
+                </svg>
+              </div>
+              <label class="processing-content-subtitle">{{
+                procressingMessage
+              }}</label>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="upload-status">
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title> File Upload Status </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div>
+                <table mat-table [dataSource]="dataSource">
+                  <ng-container matColumnDef="File Name">
+                    <th mat-header-cell *matHeaderCellDef>File Name</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.file_name }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Progress">
+                    <th mat-header-cell *matHeaderCellDef>Progress</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-progress-bar
+                        color="primary"
+                        [value]="element.progress"
+                        class="upload-progressbar"
+                      ></mat-progress-bar>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Value">
+                    <th mat-header-cell *matHeaderCellDef>Value</th>
+                    <td mat-cell *matCellDef="let element">
+                      <label class="upload-progress-text"
+                        >{{ element.progress }}%</label
+                      >
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Message">
+                    <th mat-header-cell *matHeaderCellDef>Message</th>
+                    <td mat-cell *matCellDef="let element">
+                      <div
+                        *ngIf="
+                          element.message != 'Completed!' &&
+                          element.message != 'Uploading...'
+                        "
+                        class="flex-container-row upload-statu-message"
+                      >
+                        <mat-icon>error</mat-icon>
+                        <label>{{ element.message }}</label>
+                      </div>
+                      <mat-icon
+                        *ngIf="element.message === 'Completed!'"
+                        class="flex-container-row upload-statu-message"
+                        >done</mat-icon
+                      >
+                      <label *ngIf="element.message === 'Uploading...'">{{
+                        element.message
+                      }}</label>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                  ></tr>
+                </table>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+        <div class="upload-control-group">
+          <button
+            mat-raised-button
+            color="basic"
+            class="btn-style"
+            matStepperPrevious
+            (click)="processingBack()"
+          >
+            BACK
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-style"
+            matStepperNext
+            [disabled]="!isSecondStepAvaliable"
+          >
+            NEXT
+          </button>
         </div>
       </form>
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Finialize</ng-template>
       <!-- User edit the parsed output -->
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
+      <record-edit-dialog-content
+        [result]="response"
+      ></record-edit-dialog-content>
+      <div class="flex-container-row finialize-control-group">
+        <button
+          mat-raised-button
+          color="basic"
+          class="btn-style"
+          matStepperPrevious
+        >
+          Back
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          class="btn-style"
+          matStepperNext
+          [disabled]="!isSecondStepAvaliable"
+          (click)="submit()"
+        >
+          Submite
+        </button>
       </div>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      <!-- User edit the parsed output -->
-      <div>
-        <!-- Display done and a snackbar -->
+      <ng-template matStepLabel>Submite to database</ng-template>
+      <div class="flex-container-column upload-container">
+        <div class="upload-card">
+          <mat-card>
+            <mat-card-content class="flex-container-column processing-content">
+              <h2 class="processing-content-header">
+                {{ uploadingHeaderMessage }}
+              </h2>
+
+              <mat-progress-spinner
+                *ngIf="!isUploadProgressCompleted"
+                [color]="'primary'"
+                [mode]="'indeterminate'"
+              >
+              </mat-progress-spinner>
+              <div
+                class="wrapper"
+                *ngIf="isUploadContainError && isUploadProgressCompleted"
+              >
+                <svg
+                  class="checkmark-warn"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 52 52"
+                >
+                  <circle
+                    class="checkmark_circle"
+                    cx="26"
+                    cy="26"
+                    r="25"
+                    fill="none"
+                  />
+                  <path
+                    class="checkmark_check"
+                    fill="none"
+                    d="M14.1 14.1l23.8 23.8 m0,-23.8 l-23.8,23.8"
+                  />
+                </svg>
+              </div>
+              <div
+                class="wrapper"
+                *ngIf="isUploadProgressCompleted && !isUploadContainError"
+              >
+                <svg
+                  class="checkmark-primary"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 52 52"
+                >
+                  <circle
+                    class="checkmark__circle"
+                    cx="26"
+                    cy="26"
+                    r="25"
+                    fill="none"
+                  />
+                  <path
+                    class="checkmark__check"
+                    fill="none"
+                    d="M14.1 27.2l7.1 7.2 16.7-16.8"
+                  />
+                </svg>
+              </div>
+              <label class="processing-content-subtitle">{{
+                uploadingMessage
+              }}</label>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div>
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-style"
+            matStepperNext
+            [disabled]="!isUploadProgressCompleted"
+            (click)="closeDialog()"
+          >
+            DONE
+          </button>
+        </div>
       </div>
     </mat-step>
   </mat-stepper>
