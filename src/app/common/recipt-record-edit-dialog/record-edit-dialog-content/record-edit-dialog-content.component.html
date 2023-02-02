@@ -1,97 +1,218 @@
-<mat-tab-group>
-  <mat-tab label="SUMMARY">
-    <form class="tab-container-style">
-      <div class="flex-container-column">
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Merchant Name</mat-label>
-          <input matInput placeholder="Ex. Consto" />
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Merchant Address</mat-label>
-          <input matInput placeholder="Ex. Consto" />
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Merchant Phone</mat-label>
-          <input matInput placeholder="Ex. Consto" />
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Country</mat-label>
-          <input matInput placeholder="Ex. Consto" />
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Recipt No.</mat-label>
-          <input matInput placeholder="Ex. Consto" />
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Date</mat-label>
-          <input matInput placeholder="Ex. Consto" />
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Time</mat-label>
-          <input matInput placeholder="Ex. Consto" />
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Currency</mat-label>
-          <input matInput placeholder="Ex. Consto" />
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Total</mat-label>
-          <input matInput placeholder="Ex. Consto" />
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Tax</mat-label>
-          <input matInput placeholder="Ex. Consto" />
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Payment Method</mat-label>
-          <input matInput placeholder="Ex. Consto" />
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>OCR Confidence</mat-label>
-          <input matInput disabled placeholder="Ex. Consto" />
-        </mat-form-field>
-        <mat-form-field class="example-chip-list full-width" appearance="fill">
-          <mat-label>Payer</mat-label>
-          <mat-chip-grid #chipGrid aria-label="Fruit selection">
-            <mat-chip-row
-              *ngFor="let fruit of fruits"
-              (removed)="remove(fruit)"
-            >
-              {{ fruit }}
-              <button matChipRemove [attr.aria-label]="'remove ' + fruit">
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </mat-chip-row>
-          </mat-chip-grid>
-          <input
-            placeholder="New Fruit..."
-            #fruitInput
-            [formControl]="fruitCtrl"
-            [matChipInputFor]="chipGrid"
-            [matAutocomplete]="auto"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            (matChipInputTokenEnd)="add($event)"
-          />
-          <mat-autocomplete
-            #auto="matAutocomplete"
-            (optionSelected)="selected($event)"
-          >
-            <mat-option
-              *ngFor="let fruit of filteredFruits | async"
-              [value]="fruit"
-            >
-              {{ fruit }}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Share With</mat-label>
-          <input matInput placeholder="Ex. Same With The Above Style" />
-        </mat-form-field>
-      </div>
-    </form>
-  </mat-tab>
-  <mat-tab label="OCR TEXT"> OCR TEXT </mat-tab>
-  <mat-tab label="FULL JSON"> FULL JSON </mat-tab>
-  <mat-tab label="IMAGE"> IMAGE </mat-tab>
-</mat-tab-group>
+<div>
+  <mat-stepper linear #stepper>
+    <mat-step
+      *ngFor="let group of formGroups; index as idx"
+      [stepControl]="group"
+      [editable]="true"
+    >
+      <form [formGroup]="group">
+        <mat-tab-group>
+          <mat-tab label="SUMMARY">
+            <form class="tab-container-style">
+              <div class="flex-container-column">
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Merchant Name</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. Costco"
+                    [(ngModel)]="
+                      result['files'][idx]['receipt']['merchant_name']
+                    "
+                    [formControl]="formCtrl"
+                    name="merchant_name"
+                    required
+                  />
+                </mat-form-field>
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Merchant Address</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. 8 Chifley Dr, Moorabbin Airport VIC 3194"
+                  />
+                </mat-form-field>
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Merchant Phone</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. (03)9552 7700"
+                    [(ngModel)]="
+                      result['files'][idx]['receipt']['merchant_phone']
+                    "
+                    name="merchant_phone"
+                  />
+                </mat-form-field>
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Recipt No.</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. 1234567"
+                    [(ngModel)]="result['files'][idx]['receipt']['receipt_no']"
+                    name="receipt_no"
+                  />
+                </mat-form-field>
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Date</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. 21/03/2022"
+                    [(ngModel)]="result['files'][idx]['receipt']['date']"
+                    name="date"
+                  />
+                </mat-form-field>
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Time</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. 23:01"
+                    [(ngModel)]="result['files'][idx]['receipt']['time']"
+                    name="time"
+                  />
+                </mat-form-field>
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Total</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. 21.01"
+                    [(ngModel)]="result['files'][idx]['receipt']['total']"
+                    name="total"
+                  />
+                </mat-form-field>
+
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Payment Method</mat-label>
+                  <input
+                    matInput
+                    placeholder="Ex. CARD"
+                    [(ngModel)]="
+                      result['files'][idx]['receipt']['payment_method']
+                    "
+                    name="payment_method"
+                  />
+                </mat-form-field>
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>OCR Confidence</mat-label>
+                  <input matInput disabled placeholder="TODO" />
+                </mat-form-field>
+                <mat-form-field
+                  class="example-chip-list full-width"
+                  appearance="fill"
+                >
+                  <mat-label>Payer</mat-label>
+                  <mat-chip-grid #payerChipGrid aria-label="Payer selection">
+                    <mat-chip-row
+                      *ngIf="result['files'][idx]['receipt']['payer'] != ''"
+                      (removed)="
+                        removePayer(
+                          result['files'][idx]['receipt']['payer'],
+                          idx
+                        )
+                      "
+                    >
+                      {{ result["files"][idx]["receipt"]["payer"] }}
+                      <button
+                        matChipRemove
+                        [attr.aria-label]="
+                          'remove ' + result['files'][idx]['receipt']['payer']
+                        "
+                      >
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip-row>
+                  </mat-chip-grid>
+                  <input
+                    placeholder="{{ payerPlaceHolderString }}"
+                    #payerInput
+                    [formControl]="payerCtrlList[idx]"
+                    [matChipInputFor]="payerChipGrid"
+                    [matAutocomplete]="payerAutoComplete"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="addPayer($event, idx)"
+                  />
+                  <mat-autocomplete
+                    #payerAutoComplete="matAutocomplete"
+                    (optionSelected)="selectedPayer($event, idx)"
+                  >
+                    <mat-option
+                      *ngFor="let payer of filteredPayersList[idx] | async"
+                      [value]="payer"
+                    >
+                      {{ payer }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field
+                  class="example-chip-list full-width"
+                  appearance="fill"
+                >
+                  <mat-label>Share With</mat-label>
+                  <mat-chip-grid
+                    #shareWithChipGrid
+                    aria-label="Share selection"
+                  >
+                    <mat-chip-row
+                      *ngFor="
+                        let shareWith of result['files'][idx]['receipt'][
+                          'share_with'
+                        ]
+                      "
+                      (removed)="removeShareWith(shareWith, idx)"
+                    >
+                      {{ shareWith }}
+                      <button
+                        matChipRemove
+                        [attr.aria-label]="'remove ' + shareWith"
+                      >
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip-row>
+                  </mat-chip-grid>
+                  <input
+                    placeholder="Select or insert share with"
+                    #shareWithInput
+                    [formControl]="shareWithCtrlList[idx]"
+                    [matChipInputFor]="shareWithChipGrid"
+                    [matAutocomplete]="shareWithAutoComplete"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="addShareWith($event, idx)"
+                  />
+                  <mat-autocomplete
+                    #shareWithAutoComplete="matAutocomplete"
+                    (optionSelected)="selectedShareWith($event, idx)"
+                  >
+                    <mat-option
+                      *ngFor="
+                        let shareWith of filteredShareWithsList[idx] | async
+                      "
+                      [value]="shareWith"
+                    >
+                      {{ shareWith }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+            </form>
+          </mat-tab>
+          <mat-tab label="OCR TEXT"> OCR TEXT </mat-tab>
+          <mat-tab label="FULL JSON"> FULL JSON </mat-tab>
+          <mat-tab label="IMAGE"> IMAGE </mat-tab>
+        </mat-tab-group>
+        <div>
+          <button mat-button matStepperPrevious>
+            <mat-icon
+              aria-hidden="false"
+              aria-label="back icon"
+              fontIcon="arrow_back_ios"
+            ></mat-icon>
+          </button>
+          <button mat-button matStepperNext>
+            <mat-icon
+              aria-hidden="false"
+              aria-label="next icon"
+              fontIcon="arrow_forward_ios"
+            ></mat-icon>
+          </button>
+        </div>
+      </form>
+    </mat-step>
+  </mat-stepper>
+</div>

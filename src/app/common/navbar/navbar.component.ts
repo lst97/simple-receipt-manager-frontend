@@ -48,12 +48,6 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.groupService.getGroupsName().subscribe((response) => {
-      this.loggerService?.success(
-        JSON.stringify(response),
-        'navbar.component',
-        'this.groupService.getGroupsName().subscribe()'
-      );
-
       // JSON response to String[]
       // EX: [{"name":"group_1"},{"name":"group_2"}] -> ["group_1", "group_2"]
       this.groupInfo.len = response.length;

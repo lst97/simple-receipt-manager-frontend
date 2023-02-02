@@ -1,30 +1,21 @@
 <div class="control-group-layout">
   <!--TODO Click - button to delete next to the table-->
-  <button mat-raised-button color="warn" class="btn-style">Delete</button>
+  <button mat-raised-button color="warn" class="btn-style">DELETE</button>
   <button
     mat-raised-button
-    (click)="openDialog('0ms', '0ms')"
+    (click)="openManuelAddDialog('0ms', '0ms')"
     color="primary"
     class="btn-style"
   >
-    Add
+    ADD
   </button>
-  <input
-    #imageInput
-    hidden="true"
-    type="file"
-    onclick="this.value=null"
-    (change)="fileInputChange($event)"
-    accept=".png, .jpeg, .jpg"
-    multiple
-  />
   <button
-    mat-flat-button
+    mat-raised-button
     color="primary"
     class="btn-style"
-    (click)="imageInput.click()"
+    (click)="openUploadDialog('0ms', '0ms')"
   >
     UPLOAD
   </button>
-  <button mat-raised-button color="primary" class="btn-style">Export</button>
+  <button mat-raised-button color="primary" class="btn-style">EXPORT</button>
 </div>

@@ -15,48 +15,10 @@ export class ControlGroupComponent {
 
   constructor(
     @Optional() private logger: LoggerService,
-    private dialog: MatDialog,
-    private fileUploader: FileUploaderComponent
+    private dialog: MatDialog
   ) {}
 
-  fileInputChange(fileInputEvent: any) {
-    this.files = fileInputEvent.target.files;
-    if (this.files.length > 0) {
-      for (const file of this.files) {
-        console.log(file);
-      }
-    } else {
-      this.logger.error(
-        'No Image Selected.',
-        'control-group.component',
-        'imageInputChange()'
-      );
-    }
-  }
-
-  // JUST FOR TEST, it should handle by file-uploader component
-  uploadFiles(files: File[]) {
-    for (const file of files) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        // USE uploader.service ------
-        // this.base64Images.push(reader.result);
-        // if(this.base64Images.length === this.files.length){
-        //   this.http.post('/api/upload', this.base64Images).subscribe(
-        //     response => {
-        //       console.log(response);
-        //     },
-        //     error => {
-        //       console.log(error);
-        //     }
-        //   );
-        // }
-      };
-    }
-  }
-
-  openDialog(
+  openManuelAddDialog(
     enterAnimationDuration: string,
     exitAnimationDuration: string
   ): void {
@@ -67,5 +29,18 @@ export class ControlGroupComponent {
     dialogConfig.exitAnimationDuration = exitAnimationDuration;
 
     this.dialog.open(ReciptRecordEditDialogComponent, dialogConfig);
+  }
+
+  openUploadDialog(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string
+  ): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.maxWidth = 'none';
+    dialogConfig.maxHeight = 'none';
+    dialogConfig.enterAnimationDuration = enterAnimationDuration;
+    dialogConfig.exitAnimationDuration = exitAnimationDuration;
+
+    this.dialog.open(FileUploaderComponent, dialogConfig);
   }
 }

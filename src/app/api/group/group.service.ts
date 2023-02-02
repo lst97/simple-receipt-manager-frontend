@@ -3,7 +3,7 @@ import { AppConfig } from './../../AppConfig/appconfig.interface';
 import { APP_SERVICE_CONFIG } from './../../AppConfig/appconfig.service';
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { StateGroup } from './group';
 import { startWith, map } from 'rxjs/operators';
 import { FormGroup } from '@angular/forms';

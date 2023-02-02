@@ -49,3 +49,19 @@ body {
   justify-content: center;
   gap: 16px;
 }
+
+.align-left {
+  align-items: flex-start;
+}
+
+.align-right {
+  align-items: flex-end;
+}
+
+.title {
+  display: block;
+}
+
+.subtitle {
+  display: block;
+}

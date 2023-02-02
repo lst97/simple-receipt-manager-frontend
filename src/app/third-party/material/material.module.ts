@@ -13,6 +13,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const MaterialComponents = [
   MatToolbarModule,
@@ -28,6 +34,12 @@ const MaterialComponents = [
   MatPaginatorModule,
   MatDialogModule,
   MatChipsModule,
+  MatProgressBarModule,
+  MatGridListModule,
+  MatStepperModule,
+  MatExpansionModule,
+  MatSnackBarModule,
+  MatProgressSpinnerModule,
 ];
 @NgModule({
   imports: [MaterialComponents],
