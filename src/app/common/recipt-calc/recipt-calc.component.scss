@@ -1,3 +1,43 @@
+@import "../../../styles.scss";
+
 .calc-container {
-  margin: 16px 0px 16px 0px;
+  margin: 0px 0px 16px 0px;
+  gap: 32px;
+}
+
+.calc-records-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+.calc-payment-status > mat-form-field {
+  width: 268px;
+}
+
+.calc-searchbar {
+  width: 268px;
+}
+.calc-bottom-continaer {
+  gap: 16px;
+  width: 100%;
+  margin: 0px 16px 0px 16px;
+  overflow: hidden;
+}
+
+.calc-calculator-table {
+  flex: 6;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+  margin: 0px 16px 0px 0px;
+}
+
+.calc-selection {
+  flex: 6;
+  align-items: center;
+  justify-content: center;
+  margin: 0px 0px 0px 16px;
 }
