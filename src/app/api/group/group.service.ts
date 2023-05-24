@@ -69,16 +69,22 @@ export class GroupService {
   }
 
   // Short description for receipt-viewer-table.
-  getGroupInfo(id: string): Observable<any> {
+  getGroupRecords(id: string): Observable<any> {
     return this.http.get<string>(
       `${this.config.apiEndpoint}/group_records/${id}`
+    );
+  }
+
+  getGroupInfo(id: string): Observable<any> {
+    return this.http.get<string>(
+      `${this.config.apiEndpoint}/test/group_info/${id}`
     );
   }
 
   // TODO: fix duplicated subscribe call use sharReplay?
   getGroupsName(): Observable<any> {
     let observable = this.http.get<any>(
-      `${this.config.apiEndpoint}/groups_info`
+      `${this.config.apiEndpoint}/test/groups_info`
     );
     observable.subscribe((response) => {
       this._constructSearchBar(response);
