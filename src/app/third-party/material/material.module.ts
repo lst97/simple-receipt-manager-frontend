@@ -19,6 +19,9 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 const MaterialComponents = [
   MatToolbarModule,
@@ -40,6 +43,9 @@ const MaterialComponents = [
   MatExpansionModule,
   MatSnackBarModule,
   MatProgressSpinnerModule,
+  MatSelectModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
 ];
 @NgModule({
   imports: [MaterialComponents],
