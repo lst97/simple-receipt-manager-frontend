@@ -65,20 +65,22 @@ export class GroupService {
 
   // Method for making a GET request
   getGroups(): Observable<any> {
-    return this.http.get<string>(`${this.config.apiEndpoint}/groups`);
+    return this.http.get<string>(
+      `${this.config.apiEndpoint}${this.config.apiPrefix}/groups`
+    );
   }
 
   // Short description for receipt-viewer-table.
   getGroupInfo(id: string): Observable<any> {
     return this.http.get<string>(
-      `${this.config.apiEndpoint}/group_records/${id}`
+      `${this.config.apiEndpoint}${this.config.apiPrefix}/group_records/${id}`
     );
   }
 
   // TODO: fix duplicated subscribe call use sharReplay?
   getGroupsName(): Observable<any> {
     let observable = this.http.get<any>(
-      `${this.config.apiEndpoint}/groups_info`
+      `${this.config.apiEndpoint}${this.config.apiPrefix}/groups_info`
     );
     observable.subscribe((response) => {
       this._constructSearchBar(response);

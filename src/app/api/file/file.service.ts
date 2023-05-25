@@ -33,7 +33,7 @@ export class FileService {
 
     const req = new HttpRequest(
       'POST',
-      `${this.config.apiEndpoint}/test/upload/${group_id}`,
+      `${this.config.apiEndpoint}${this.config.apiPrefix}/upload/${group_id}`,
       formData,
       {
         reportProgress: true,
@@ -45,8 +45,12 @@ export class FileService {
   }
 
   submit(json: JSON) {
-    return this.http.post(`${this.config.apiEndpoint}/test/submit`, json, {
-      observe: 'response',
-    });
+    return this.http.post(
+      `${this.config.apiEndpoint}${this.config.apiPrefix}/submit`,
+      json,
+      {
+        observe: 'response',
+      }
+    );
   }
 }
