@@ -3,7 +3,7 @@ import { LoggerService } from './../../logger/logger.service';
 import { Component, ViewChild, OnInit, Optional } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReceiptRecordElement } from './recipt-table';
 import { ReceiptService } from 'src/app/api/receipt/receipt.service';
 import { Receipt } from 'src/app/api/receipt/receipt';
