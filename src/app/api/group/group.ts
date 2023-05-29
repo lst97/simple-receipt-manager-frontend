@@ -4,8 +4,7 @@ export interface GroupsInfo {
 }
 
 export interface GroupData {
-  _id: string;
-  group_number: number;
+  id: string;
   name: string;
   users: string[];
   records: object[];

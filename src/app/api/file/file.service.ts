@@ -21,19 +21,30 @@ export class FileService {
 
   // use for tracking progress
   upload(
+    page: number,
     group_id: string,
     request_id: string,
     file: File
   ): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
 
+    let data = {
+      pagination: { page: page, total: this.total_files },
+      metadata: {
+        clientVersion: '0.1',
+        language: 'en-US',
+        requestId: request_id,
+        timestamp: new Date().toISOString(),
+        deviceType: 'website',
+      },
+    };
+
     formData.append('file', file);
-    formData.append('request_id', request_id);
-    formData.append('total_files', this.total_files.toString());
+    formData.append('data', JSON.stringify(data));
 
     const req = new HttpRequest(
       'POST',
-      `${this.config.apiEndpoint}${this.config.apiPrefix}/upload/${group_id}`,
+      `${this.config.apiEndpoint}${this.config.apiPrefix}/group/${group_id}/upload`,
       formData,
       {
         reportProgress: true,
@@ -44,10 +55,21 @@ export class FileService {
     return this.http.request(req);
   }
 
-  submit(json: JSON) {
+  submit(request_id: string, group_id: string, json: JSON) {
+    const requestBody = {
+      metadata: {
+        clientVersion: '0.1',
+        language: 'en-US',
+        requestId: request_id,
+        timestamp: new Date().toISOString(),
+        deviceType: 'website',
+      },
+      ...json, // Include the existing JSON data
+    };
+
     return this.http.post(
-      `${this.config.apiEndpoint}${this.config.apiPrefix}/submit`,
-      json,
+      `${this.config.apiEndpoint}${this.config.apiPrefix}/group/${group_id}/submit`,
+      requestBody,
       {
         observe: 'response',
       }

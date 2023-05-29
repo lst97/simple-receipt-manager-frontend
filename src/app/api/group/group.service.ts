@@ -23,7 +23,7 @@ export class GroupService {
   stateGroupOptions!: Observable<StateGroup[]>;
 
   private _constructSearchBar(res: any): void {
-    res.forEach((element: any) => {
+    res.data.forEach((element: any) => {
       let firstLetter = element.name[0];
       let groupIndex = this.stateGroups.findIndex(
         (letter) => letter['letter'][0] == firstLetter
@@ -73,14 +73,14 @@ export class GroupService {
   // Short description for receipt-viewer-table.
   getGroupInfo(id: string): Observable<any> {
     return this.http.get<string>(
-      `${this.config.apiEndpoint}${this.config.apiPrefix}/group_records/${id}`
+      `${this.config.apiEndpoint}${this.config.apiPrefix}/group/${id}/records`
     );
   }
 
   // TODO: fix duplicated subscribe call use sharReplay?
   getGroupsName(): Observable<any> {
     let observable = this.http.get<any>(
-      `${this.config.apiEndpoint}${this.config.apiPrefix}/groups_info`
+      `${this.config.apiEndpoint}${this.config.apiPrefix}/groups`
     );
     observable.subscribe((response) => {
       this._constructSearchBar(response);
