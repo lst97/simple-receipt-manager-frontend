@@ -1,6 +1,6 @@
 export interface ReceiptRecordElement {
   merchant_name: string;
-  receipt_no: number;
+  receipt_no: string;
   date: string;
   payer: string;
   total: number;

@@ -25,6 +25,7 @@ import { NewGroupDialogComponent } from './common/navbar/new-group-dialog/new-gr
 import { WelcomeComponent } from './common/welcome/welcome.component';
 import { FileUploaderComponent } from './common/file-uploader/file-uploader.component';
 import { ImageViewerComponent } from './common/image-viewer/image-viewer.component';
+import { LoginComponent } from './common/login/login.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { ImageViewerComponent } from './common/image-viewer/image-viewer.compone
     WelcomeComponent,
     FileUploaderComponent,
     ImageViewerComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

@@ -49,12 +49,51 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.groupService.getGroupsName().subscribe((response) => {
       // JSON response to String[]
-      // EX: [{"name":"group_1"},{"name":"group_2"}] -> ["group_1", "group_2"]
-      this.groupInfo.len = response.length;
-      response.forEach((element: any) => {
+      //  {
+      //   "data": [
+      //     {
+      //       "id": "6472af7b086d0d10ccc4928f",
+      //       "name": "ST Zita",
+      //       "records": [
+      //         "6472af7b086d0d10ccc49285"
+      //       ],
+      //       "users": [
+      //         "6472af7a086d0d10ccc4926c"
+      //       ]
+      //     },
+      //     {
+      //       "id": "6472af7b086d0d10ccc49290",
+      //       "name": "Deakin",
+      //       "records": [
+      //         "6472af7b086d0d10ccc49286"
+      //       ],
+      //       "users": [
+      //         "6472af7a086d0d10ccc4926d"
+      //       ]
+      //     },
+      //     {
+      //       "id": "6472af7b086d0d10ccc49291",
+      //       "name": "Glen Waverley",
+      //       "records": [
+      //         "6472af7b086d0d10ccc49287"
+      //       ],
+      //       "users": [
+      //         "6472af7a086d0d10ccc4926e"
+      //       ]
+      //     }
+      //   ],
+      //   "message": "Success",
+      //   "meta_data": null,
+      //   "pagination": null,
+      //   "status_code": 200
+      // }
+
+      let data = response.data;
+      this.groupInfo.len = data.length;
+      data.forEach((element: any) => {
         this.groupInfo.records.push({
           name: element.name,
-          id: element._id.$oid,
+          id: element.id,
         });
       });
     });

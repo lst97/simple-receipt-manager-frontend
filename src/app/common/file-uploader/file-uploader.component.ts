@@ -154,63 +154,66 @@ export class FileUploaderComponent {
         message: 'Uploading...',
       };
       this.groupRecords.push(record as UploadProgressElement);
-      this.fileService.upload(this.groud_id, requiest_id, file).subscribe({
-        next: (event: any) => {
-          if (event.type === HttpEventType.UploadProgress) {
-            this.progressInfos[idx].value = Math.round(
-              (100 * event.loaded) / event.total
-            );
+      this.fileService
+        .upload(idx + 1, this.groud_id, requiest_id, file)
+        .subscribe({
+          next: (event: any) => {
+            if (event.type === HttpEventType.UploadProgress) {
+              this.progressInfos[idx].value = Math.round(
+                (100 * event.loaded) / event.total
+              );
 
-            record.progress = this.progressInfos![idx].value;
-            this.dataSource = new MatTableDataSource<UploadProgressElement>(
-              this.groupRecords
-            );
-          } else if (event instanceof HttpResponse) {
-            const msg = `${file.name}: Completed!`;
-            this.message.push(msg);
-            this.requestContainSuccess = true;
+              record.progress = this.progressInfos![idx].value;
+              this.dataSource = new MatTableDataSource<UploadProgressElement>(
+                this.groupRecords
+              );
+            } else if (event instanceof HttpResponse) {
+              const msg = `${file.name}: Completed!`;
+              this.message.push(msg);
+              this.requestContainSuccess = true;
+
+              if (idx + 1 === this.validFilesFlags!.length) {
+                // last page
+                this.response = event.body;
+                this.procressingHeaderMessage = 'Processing complete!';
+                if (this.requestContainError) {
+                  this.isSecondStepAvaliable = false;
+                  this.processImageFormGroup.enable();
+                } else {
+                  this.isSecondStepAvaliable = true;
+                  this.processImageFormGroup.disable();
+                  this.procressingMessage = 'Done!';
+                }
+              }
+              record.message = 'Completed!';
+              this.dataSource = new MatTableDataSource<UploadProgressElement>(
+                this.groupRecords
+              );
+            }
+          },
+          error: (err: any) => {
+            this.progressInfos[idx].value = 0;
+
+            // prevent multiple snackbar messages
+            if (!this.requestContainError) {
+              this.procressingMessage =
+                'Process contain error, please try again!';
+              this.openSnackBar('Image(s) processing contain error.');
+              this.requestContainError = true;
+              this.isSecondStepAvaliable = false;
+              this.processImageFormGroup.enable();
+            }
 
             if (this.validFilesFlags!.length - 1 === idx) {
-              this.response = event.body;
               this.procressingHeaderMessage = 'Processing complete!';
-              if (this.requestContainError) {
-                this.isSecondStepAvaliable = false;
-                this.processImageFormGroup.enable();
-              } else {
-                this.isSecondStepAvaliable = true;
-                this.processImageFormGroup.disable();
-                this.procressingMessage = 'Done!';
-              }
             }
-            record.message = 'Completed!';
+            record.progress = this.progressInfos[idx].value;
+            record.message = err.error.message;
             this.dataSource = new MatTableDataSource<UploadProgressElement>(
               this.groupRecords
             );
-          }
-        },
-        error: (err: any) => {
-          this.progressInfos[idx].value = 0;
-
-          // prevent multiple snackbar messages
-          if (!this.requestContainError) {
-            this.procressingMessage =
-              'Process contain error, please try again!';
-            this.openSnackBar('Image(s) processing contain error.');
-            this.requestContainError = true;
-            this.isSecondStepAvaliable = false;
-            this.processImageFormGroup.enable();
-          }
-
-          if (this.validFilesFlags!.length - 1 === idx) {
-            this.procressingHeaderMessage = 'Processing complete!';
-          }
-          record.progress = this.progressInfos[idx].value;
-          record.message = err.error.message;
-          this.dataSource = new MatTableDataSource<UploadProgressElement>(
-            this.groupRecords
-          );
-        },
-      });
+          },
+        });
     }
   }
 
@@ -234,18 +237,20 @@ export class FileUploaderComponent {
   }
 
   submit() {
-    this.fileService.submit(this.response).subscribe((res: any) => {
-      this.isUploadProgressCompleted = true;
-      if (res.status === 200) {
-        this.uploadingHeaderMessage = 'Upload complete!';
-        this.uploadingMessage = 'Done!';
-        this.openSnackBar('Data submitted successfully.');
-      } else {
-        this.isUploadContainError = true;
-        this.uploadingMessage = 'Data submitted failed, please try again!';
-        this.openSnackBar('Data submitted failed.');
-      }
-    });
+    this.fileService
+      .submit(this.request_id, this.groud_id, this.response)
+      .subscribe((res: any) => {
+        this.isUploadProgressCompleted = true;
+        if (res.status === 200) {
+          this.uploadingHeaderMessage = 'Upload complete!';
+          this.uploadingMessage = 'Done!';
+          this.openSnackBar('Data submitted successfully.');
+        } else {
+          this.isUploadContainError = true;
+          this.uploadingMessage = 'Data submitted failed, please try again!';
+          this.openSnackBar('Data submitted failed.');
+        }
+      });
   }
 
   openImageViewer(idx: number) {

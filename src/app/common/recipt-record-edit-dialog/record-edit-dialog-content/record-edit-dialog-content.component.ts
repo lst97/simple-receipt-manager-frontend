@@ -8,7 +8,13 @@ import {
   ViewChildren,
   QueryList,
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import {
   MatAutocompleteSelectedEvent,
   MatAutocompleteTrigger,
@@ -27,7 +33,7 @@ export class RecordEditDialogContentComponent implements OnChanges {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   formCtrl = new FormControl('', [
     Validators.required,
-    this.NmaeValidator.bind(this),
+    this.NameValidator.bind(this),
   ]);
   payerCtrlList: FormControl[] = [];
   shareWithCtrlList: FormControl[] = [];
@@ -57,14 +63,14 @@ export class RecordEditDialogContentComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['result'] && changes['result'].currentValue) {
       const response = changes['result'].currentValue;
-      if (response.files && response.files.length) {
-        for (const file of response.files) {
+      if (response && response['data'].length) {
+        for (const receipt of response['data']) {
           this.payerCtrlList.push(new FormControl());
           this.shareWithCtrlList.push(new FormControl());
           this.allMembers.push(response.users);
           this.formGroups.push(
             this.formBuilder.group({
-              file_name: file.receipt.file_name,
+              file_name: receipt.file_name,
             })
           );
           this.refreshMembers(this.formGroups.length - 1);
@@ -188,7 +194,7 @@ export class RecordEditDialogContentComponent implements OnChanges {
     this.refreshMembers(idx);
   }
 
-  NmaeValidator(control: FormControl) {
+  NameValidator(control: AbstractControl): ValidationErrors | null {
     const nameRegex = /^\w[\w.\-#&\s]*$/;
     const name = control.value;
     if (!nameRegex.test(name)) {
