@@ -1,3 +1,4 @@
+import { AuthModule } from './auth/auth.module';
 import { ThirdPartyModule } from './third-party/third-party.module';
 import { RequestInterceptor } from './api/request.interceptor';
 import { APP_CONFIG, APP_SERVICE_CONFIG } from './AppConfig/appconfig.service';
@@ -25,7 +26,8 @@ import { NewGroupDialogComponent } from './common/navbar/new-group-dialog/new-gr
 import { WelcomeComponent } from './common/welcome/welcome.component';
 import { FileUploaderComponent } from './common/file-uploader/file-uploader.component';
 import { ImageViewerComponent } from './common/image-viewer/image-viewer.component';
-import { LoginComponent } from './common/login/login.component';
+import { AdminModule } from './admin/admin.module';
+import { NotFoundComponent } from './common/errors/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,7 @@ import { LoginComponent } from './common/login/login.component';
     WelcomeComponent,
     FileUploaderComponent,
     ImageViewerComponent,
-    LoginComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +58,8 @@ import { LoginComponent } from './common/login/login.component';
     ReactiveFormsModule,
     HttpClientModule,
     ThirdPartyModule,
+    AdminModule,
+    AuthModule,
   ],
   providers: [
     {
