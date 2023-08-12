@@ -20,6 +20,9 @@ export class LoginComponent {
     this.message = this.getMessage();
   }
 
+  username: string = '';
+  password: string = '';
+
   getMessage() {
     return 'Logged ' + (this.authService.isLoggedIn ? 'in' : 'out');
   }
